@@ -13,7 +13,7 @@ export class LaserClass extends GameObject {
       this.dead = true;
     }
   }
-  move() {
+  movement() {
     this.positionY -= this.velocity;
   }
 }

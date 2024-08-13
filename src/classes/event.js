@@ -9,7 +9,7 @@ export class EventEmmiter {
   emit(eventName, payload = null) {
     if (this.listeners[eventName]) {
       this.listeners[eventName].forEach((event) => {
-        event.listener(payload);
+        event(eventName, payload);
       });
     }
   }

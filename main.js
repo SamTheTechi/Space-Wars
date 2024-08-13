@@ -3,12 +3,16 @@ import { movementKeys } from './src/util/keybinding';
 import { PlayerClass } from './src/classes/player';
 import { loadasset } from './src/util/loadasset';
 import { EnemyClass } from './src/classes/enemy';
+import { eventEmmiter, EventMaping } from './src/util/eventBinding';
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 let ObjectArray = new Array();
 
-let hero, enemy, laser;
+let hero,
+  enemy,
+  laser,
+  playerSpirit = new EnemyClass();
 
 const canvasHeight = (canvas.height = 650);
 const canvasWidth = (canvas.width = 800);
@@ -28,21 +32,54 @@ function generateEnemy() {
   }
 }
 
-const playerSpirit = new PlayerClass(
-  canvasWidth / 2,
-  canvasHeight - canvasHeight / 4
-);
+function generatePlayer() {
+  playerSpirit = new PlayerClass(
+    canvasWidth / 2,
+    canvasHeight - canvasHeight / 4
+  );
+  ObjectArray.push(playerSpirit);
+}
+
+function updateGame() {
+  let Enemy = ObjectArray.filter((obj) => obj.type === `enemy`);
+  let Laser = ObjectArray.filter((obj) => obj.type === `laser`);
+  let Player = ObjectArray.filter((obj) => obj.type === `player`);
+
+  Player.forEach((obj) => {
+    obj.draw(hero);
+  });
+  Enemy.forEach((obj) => {
+    obj.draw(enemy);
+    obj.movement();
+  });
+  Laser.forEach((obj) => {
+    obj.draw(laser);
+    obj.movement();
+  });
+
+  ObjectArray = ObjectArray.filter((obj) => !obj.dead);
+}
 
 const animation = () => {
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  playerSpirit.draw(hero);
+  updateGame();
 
-  ObjectArray.map((item) => {
-    if (item.type === 'enemy') {
-      item.draw(enemy);
-      item.movement();
-    }
+  eventEmmiter.on(EventMaping.UP_KEY, () => {
+    playerSpirit.positionY -= playerSpirit.velocity.dy;
   });
+  eventEmmiter.on(EventMaping.DOWN_KEY, () => {
+    playerSpirit.positionY += playerSpirit.velocity.dy;
+  });
+  eventEmmiter.on(EventMaping.LEFT_KEY, () => {
+    playerSpirit.positionX -= playerSpirit.velocity.dx;
+  });
+  eventEmmiter.on(EventMaping.RIGHT_KEY, () => {
+    playerSpirit.positionX += playerSpirit.velocity.dx;
+  });
+  eventEmmiter.on(EventMaping.SPACE_KEY, () => {
+    if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
+  });
+
   requestAnimationFrame(animation);
 };
 
@@ -51,6 +88,7 @@ window.onload = async () => {
   enemy = await loadasset(`/enemyShip.png`);
   laser = await loadasset(`/laserRed.png`);
   generateEnemy();
+  generatePlayer();
   animation();
 };
 

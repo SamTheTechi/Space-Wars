@@ -2,8 +2,8 @@ import { GameObject } from './object';
 import { collision } from '../util/collision';
 
 export class EnemyClass extends GameObject {
-  constructor(positionX, positionY) {
-    super(positionX, positionY);
+  constructor(positionX, positionY, img) {
+    super(positionX, positionY, img);
     this.velocity = { dx: 3, dy: 50 };
     this.type = 'enemy';
   }
