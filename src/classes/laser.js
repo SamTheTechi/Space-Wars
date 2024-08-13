@@ -15,6 +15,13 @@ export class LaserClass extends GameObject {
     }
   }
   movement() {
-    this.positionY -= this.velocity;
+    switch (this.owner) {
+      case 'player':
+        this.positionY -= this.velocity;
+        break;
+      case `enemy`:
+        this.positionY += this.velocity;
+        break;
+    }
   }
 }

@@ -27,4 +27,13 @@ export class GameObject {
       this.height
     );
   }
+
+  collisionBoundries() {
+    return {
+      top: this.positionY,
+      left: this.positionX,
+      bottom: this.positionY + this.height,
+      right: this.positionX + this.width,
+    };
+  }
 }

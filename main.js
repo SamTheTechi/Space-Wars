@@ -4,6 +4,7 @@ import { PlayerClass } from './src/classes/player';
 import { loadasset } from './src/util/loadasset';
 import { EnemyClass } from './src/classes/enemy';
 import { eventEmmiter, EventMaping } from './src/util/eventBinding';
+import { collision } from './src/util/collision';
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
@@ -23,8 +24,8 @@ function generateEnemy() {
   for (let x = 0; x < row; x++) {
     for (let y = 0; y < col; y++) {
       const emy = new EnemyClass(
-        canvasWidth / 1.5 - 100 * x,
-        (y * canvasHeight) / (row * 2)
+        canvasWidth / 1.5 - 110 * x,
+        (y * canvasHeight) / (row * 1.7)
       );
       emy.img = enemy;
       ObjectArray.push(emy);
@@ -50,12 +51,29 @@ function updateGame() {
     obj.update();
   });
   Enemy.forEach((obj) => {
-    obj.draw(enemy);
     obj.movement();
+    obj.fire(ObjectArray);
+    obj.draw(enemy);
+    if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
+      eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
   });
   Laser.forEach((obj) => {
     obj.draw(laser);
     obj.movement();
+  });
+
+  Enemy.forEach((emy) => {
+    Laser.forEach((lsr) => {
+      if (lsr.owner === 'player') {
+        if (collision(emy.collisionBoundries(), lsr.collisionBoundries()))
+          eventEmmiter.emit(EventMaping.COLLISON_LASER, { emy, lsr });
+      } else {
+        if (
+          collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries())
+        )
+          eventEmmiter.emit(EventMaping.HIT_LASER, lsr);
+      }
+    });
   });
 
   ObjectArray = ObjectArray.filter((obj) => !obj.dead);
@@ -76,6 +94,17 @@ const EventListener = () => {
   });
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
+  });
+  eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, emy) => {
+    emy.dead = true;
+  });
+  eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { emy, lsr }) => {
+    emy.dead = true;
+    lsr.dead = true;
+  });
+  eventEmmiter.on(EventMaping.HIT_LASER, (_, lsr) => {
+    lsr.dead = true;
+    console.log(`damn`);
   });
 };
 

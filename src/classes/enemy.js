@@ -1,13 +1,15 @@
 import { GameObject } from './object';
 import { collision } from '../util/collision';
+import { LaserClass } from './laser';
 
 export class EnemyClass extends GameObject {
   constructor(positionX, positionY, img) {
     super(positionX, positionY, img);
-    this.velocity = { dx: 8, dy: 30 };
+    this.velocity = { dx: 11, dy: 30 };
     this.type = 'enemy';
     this.sutter = 3;
     this.sutterRest = 3;
+    this.fireRate = 250;
   }
   movement() {
     if (this.sutter > 0) {
@@ -24,5 +26,11 @@ export class EnemyClass extends GameObject {
       }
     }
   }
-  fire() {}
+  fire(ObjectArray) {
+    if (Math.floor(Math.random() * this.fireRate) === 0) {
+      ObjectArray.push(
+        new LaserClass(this.positionX, this.positionY, this.type)
+      );
+    }
+  }
 }
