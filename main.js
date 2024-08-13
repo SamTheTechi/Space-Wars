@@ -1,5 +1,5 @@
 /** @type {HTMLCanvasElement} */
-import { movementKeys } from './src/util/keybinding';
+import { keybindings, preventDefaultBehavior } from './src/util/keybinding';
 import { PlayerClass } from './src/classes/player';
 import { loadasset } from './src/util/loadasset';
 import { EnemyClass } from './src/classes/enemy';
@@ -23,7 +23,7 @@ function generateEnemy() {
   for (let x = 0; x < row; x++) {
     for (let y = 0; y < col; y++) {
       const emy = new EnemyClass(
-        canvasWidth / 2 - 75 * x,
+        canvasWidth / 1.5 - 100 * x,
         (y * canvasHeight) / (row * 2)
       );
       emy.img = enemy;
@@ -47,6 +47,7 @@ function updateGame() {
 
   Player.forEach((obj) => {
     obj.draw(hero);
+    obj.update();
   });
   Enemy.forEach((obj) => {
     obj.draw(enemy);
@@ -60,10 +61,7 @@ function updateGame() {
   ObjectArray = ObjectArray.filter((obj) => !obj.dead);
 }
 
-const animation = () => {
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  updateGame();
-
+const EventListener = () => {
   eventEmmiter.on(EventMaping.UP_KEY, () => {
     playerSpirit.positionY -= playerSpirit.velocity.dy;
   });
@@ -79,7 +77,11 @@ const animation = () => {
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
   });
+};
 
+const animation = () => {
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  updateGame();
   requestAnimationFrame(animation);
 };
 
@@ -87,9 +89,11 @@ window.onload = async () => {
   hero = await loadasset(`/player.png`);
   enemy = await loadasset(`/enemyShip.png`);
   laser = await loadasset(`/laserRed.png`);
+  EventListener();
   generateEnemy();
   generatePlayer();
   animation();
 };
 
-movementKeys();
+keybindings();
+preventDefaultBehavior();

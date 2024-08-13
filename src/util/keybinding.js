@@ -1,7 +1,7 @@
 import { eventEmmiter, EventMaping } from './eventBinding';
 
-export const movementKeys = async () => {
-  window.addEventListener('keyup', (event) => {
+const movementKeys = async () => {
+  window.addEventListener('keydown', (event) => {
     switch (event.key) {
       case `w`:
       case `W`:
@@ -23,6 +23,13 @@ export const movementKeys = async () => {
       case `ArrowDown`:
         eventEmmiter.emit(EventMaping.DOWN_KEY);
         break;
+    }
+  });
+};
+
+const actionKeys = async () => {
+  window.addEventListener('keydown', (event) => {
+    switch (event.key) {
       case `Enter`:
         eventEmmiter.emit(EventMaping.ENTER_KEY);
         break;
@@ -31,6 +38,11 @@ export const movementKeys = async () => {
         break;
     }
   });
+};
+
+export const keybindings = async () => {
+  await movementKeys();
+  await actionKeys();
 };
 
 export const preventDefaultBehavior = async () => {

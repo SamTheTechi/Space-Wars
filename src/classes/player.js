@@ -4,32 +4,32 @@ import { LaserClass } from './laser';
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
     super(positionX, positionY);
-    this.velocity = { dx: 0.2, dy: 0.2 };
+    this.velocity = { dx: 25, dy: 25 };
     this.cooldown = 0;
     this.type = 'player';
     this.block = false;
   }
-  movement() {
-    if (
-      this.positionX + this.width > this.canvasWidth ||
-      this.positionX < this.width
-    ) {
-      this.block = true;
-    }
-    this.block = false;
-  }
+  movement() {}
   fire(ObjectArray) {
-    ObjectArray.push(new LaserClass(this.positionX, this.positionY));
-    this.cooldown = 500;
-    let id = setInterval(() => {
-      if (this.cooldown > 0) {
-        this.cooldown -= 100;
-      } else {
-        clearInterval(id);
-      }
-    }, 200);
+    if (this.canfire()) {
+      ObjectArray.push(
+        new LaserClass(this.positionX, this.positionY, this.type)
+      );
+      this.cooldown = 25;
+    }
   }
   canfire() {
     return this.cooldown === 0;
+  }
+
+  cool() {
+    if (this.cooldown > 0) {
+      this.cooldown -= 1;
+    }
+  }
+
+  update() {
+    this.movement();
+    this.cool();
   }
 }
