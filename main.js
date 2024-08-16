@@ -21,6 +21,8 @@ const canvasWidth = (canvas.width = 800);
 function generateEnemy() {
   const row = 5;
   const col = 3;
+  // const row = 2;
+  // const col = 1;
   for (let x = 0; x < row; x++) {
     for (let y = 0; y < col; y++) {
       const emy = new EnemyClass(
@@ -48,7 +50,8 @@ function updateGame() {
   let Laser = ObjectArray.filter((obj) => obj.type === `laser`);
   let Player = ObjectArray.filter((obj) => obj.type === `player`);
 
-  // boidsAlgo(Enemy);
+  boidsAlgo(Enemy);
+
   Player.forEach((obj) => {
     obj.draw(hero);
     obj.update();

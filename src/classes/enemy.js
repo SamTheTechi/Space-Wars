@@ -4,7 +4,7 @@ import { LaserClass } from './laser';
 export class EnemyClass extends GameObject {
   constructor(positionX, positionY, img) {
     super(positionX, positionY, img);
-    this.velocity = { dx: 3, dy: 20 };
+    // this.velocity = { dx: 0, dy: 0 };
     this.type = 'enemy';
     this.fireRate = 250;
   }
