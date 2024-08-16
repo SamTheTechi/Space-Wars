@@ -31,9 +31,9 @@ export class GameObject {
   collisionBoundries() {
     return {
       top: this.positionY,
-      left: this.positionX,
+      left: this.positionX - this.width / 2,
       bottom: this.positionY + this.height,
-      right: this.positionX + this.width,
+      right: this.positionX + this.width / 2,
     };
   }
 }

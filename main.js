@@ -50,6 +50,7 @@ function updateGame() {
     obj.draw(hero);
     obj.update();
   });
+
   Enemy.forEach((obj) => {
     obj.movement();
     obj.fire(ObjectArray);
@@ -57,6 +58,7 @@ function updateGame() {
     if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
       eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
   });
+
   Laser.forEach((obj) => {
     obj.draw(laser);
     obj.movement();
@@ -80,17 +82,21 @@ function updateGame() {
 }
 
 const EventListener = () => {
-  eventEmmiter.on(EventMaping.UP_KEY, () => {
-    playerSpirit.positionY -= playerSpirit.velocity.dy;
+  eventEmmiter.on(EventMaping.UP_KEY, (_, onMove) => {
+    if (onMove) playerSpirit.movementParameter.up = true;
+    else playerSpirit.movementParameter.up = false;
   });
-  eventEmmiter.on(EventMaping.DOWN_KEY, () => {
-    playerSpirit.positionY += playerSpirit.velocity.dy;
+  eventEmmiter.on(EventMaping.DOWN_KEY, (_, onMove) => {
+    if (onMove) playerSpirit.movementParameter.down = true;
+    else playerSpirit.movementParameter.down = false;
   });
-  eventEmmiter.on(EventMaping.LEFT_KEY, () => {
-    playerSpirit.positionX -= playerSpirit.velocity.dx;
+  eventEmmiter.on(EventMaping.LEFT_KEY, (_, onMove) => {
+    if (onMove) playerSpirit.movementParameter.left = true;
+    else playerSpirit.movementParameter.left = false;
   });
-  eventEmmiter.on(EventMaping.RIGHT_KEY, () => {
-    playerSpirit.positionX += playerSpirit.velocity.dx;
+  eventEmmiter.on(EventMaping.RIGHT_KEY, (_, onMove) => {
+    if (onMove) playerSpirit.movementParameter.right = true;
+    else playerSpirit.movementParameter.right = false;
   });
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
