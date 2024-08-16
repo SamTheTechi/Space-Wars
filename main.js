@@ -41,11 +41,14 @@ function generatePlayer() {
   ObjectArray.push(playerSpirit);
 }
 
+import { boidsAlgo } from './src/util/boids';
+
 function updateGame() {
   let Enemy = ObjectArray.filter((obj) => obj.type === `enemy`);
   let Laser = ObjectArray.filter((obj) => obj.type === `laser`);
   let Player = ObjectArray.filter((obj) => obj.type === `player`);
 
+  // boidsAlgo(Enemy);
   Player.forEach((obj) => {
     obj.draw(hero);
     obj.update();
@@ -123,7 +126,7 @@ const animation = () => {
 window.onload = async () => {
   hero = await loadasset(`/player.png`);
   enemy = await loadasset(`/enemyShip.png`);
-  laser = await loadasset(`/laserRed.png`);
+  laser = await loadasset(`/laserGreen.png`);
   EventListener();
   generateEnemy();
   generatePlayer();
