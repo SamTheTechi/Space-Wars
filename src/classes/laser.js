@@ -18,9 +18,11 @@ export class LaserClass extends GameObject {
     switch (this.owner) {
       case 'player':
         this.positionY -= this.velocity;
+        if (this.positionX < 0) this.dead = true;
         break;
       case `enemy`:
         this.positionY += this.velocity;
+        if (this.positionY > this.canvasHeight) this.dead = true;
         break;
     }
   }

@@ -19,15 +19,24 @@ const canvasHeight = (canvas.height = 650);
 const canvasWidth = (canvas.width = 800);
 
 function generateEnemy() {
-  const row = 5;
-  const col = 3;
-  // const row = 2;
-  // const col = 1;
+  const row = 10;
+  const col = 1;
+
+  // for (let x = 0; x < row; x++) {
+  //   for (let y = 0; y < col; y++) {
+  //     const emy = new EnemyClass(
+  //       canvasWidth / 1.5 - 110 * x,
+  //       (y * canvasHeight) / (row * 1.7)
+  //     );
+  //     emy.img = enemy;
+  //     ObjectArray.push(emy);
+  //   }
+  // }
   for (let x = 0; x < row; x++) {
     for (let y = 0; y < col; y++) {
       const emy = new EnemyClass(
-        canvasWidth / 1.5 - 110 * x,
-        (y * canvasHeight) / (row * 1.7)
+        Math.floor(Math.random() * canvasWidth),
+        Math.floor(Math.random() * canvasHeight)
       );
       emy.img = enemy;
       ObjectArray.push(emy);
@@ -43,7 +52,7 @@ function generatePlayer() {
   ObjectArray.push(playerSpirit);
 }
 
-import { boidsAlgo } from './src/util/boids';
+import { boidsAlgo } from './src/algo/boids';
 
 function updateGame() {
   let Enemy = ObjectArray.filter((obj) => obj.type === `enemy`);
@@ -108,7 +117,7 @@ const EventListener = () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
   });
   eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, emy) => {
-    emy.dead = true;
+    // emy.dead = true;
   });
   eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { emy, lsr }) => {
     emy.dead = true;
@@ -116,7 +125,7 @@ const EventListener = () => {
   });
   eventEmmiter.on(EventMaping.HIT_LASER, (_, lsr) => {
     lsr.dead = true;
-    console.log(`damn`);
+    // console.log(`damn`);
   });
 };
 
