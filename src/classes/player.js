@@ -14,6 +14,7 @@ export class PlayerClass extends GameObject {
       right: false,
     };
   }
+
   movement() {
     if (this.movementParameter.up && 0 < this.positionY) {
       this.positionY -= this.velocity.dy;

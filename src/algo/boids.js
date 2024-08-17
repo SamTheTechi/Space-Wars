@@ -5,9 +5,9 @@ const parameter = {
   flockStrength: 10,
   avoideStrength: 2,
   veocityStrength: 10,
-  gradientStrength: 12,
+  gradientStrength: 20,
   noise: 5,
-  maxSpeed: 10,
+  maxSpeed: 12,
 };
 
 const addnoise = (value) => {
@@ -41,8 +41,8 @@ const matchVelocity = (arr) => {
     avgVelocity.dx += i.velocity.dx;
     avgVelocity.dy += i.velocity.dy;
   }
-  avgVelocity.dx /= arr.length - 1;
-  avgVelocity.dy /= arr.length - 1;
+  avgVelocity.dx /= arr.length;
+  avgVelocity.dy /= arr.length;
 
   arr.forEach((i) => {
     i.velocity.dx +=

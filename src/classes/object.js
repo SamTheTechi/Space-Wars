@@ -1,7 +1,7 @@
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
-const canvasHeight = (canvas.height = 650);
-const canvasWidth = (canvas.width = 800);
+const canvasHeight = (canvas.height = 700);
+const canvasWidth = (canvas.width = 1000);
 
 export class GameObject {
   constructor(positionX, positionY) {
