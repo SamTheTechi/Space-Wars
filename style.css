@@ -16,6 +16,7 @@ body {
   background: black;
 }
 #hit {
+  z-index: 2;
   position: absolute;
   font-size: 20px;
   color: pink;

@@ -4,7 +4,7 @@ import { LaserClass } from './laser';
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
     super(positionX, positionY);
-    this.velocity = { dx: 5, dy: 5 };
+    this.velocity = { dx: 8, dy: 8 };
     this.cooldown = 0;
     this.type = 'player';
     this.movementParameter = {
@@ -41,7 +41,7 @@ export class PlayerClass extends GameObject {
       ObjectArray.push(
         new LaserClass(this.positionX, this.positionY, this.type)
       );
-      this.cooldown = 25;
+      this.cooldown = 20;
     }
   }
   canfire() {

@@ -4,10 +4,10 @@ import { distanceBetween } from '../util/distance';
 const parameter = {
   flockStrength: 10,
   avoideStrength: 2,
-  veocityStrength: 10,
+  veocityStrength: 8,
   gradientStrength: 20,
   noise: 5,
-  maxSpeed: 12,
+  maxSpeed: 10,
 };
 
 const addnoise = (value) => {

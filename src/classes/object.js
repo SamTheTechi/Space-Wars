@@ -1,7 +1,4 @@
-const canvas = document.querySelector('#canvas');
-const ctx = canvas.getContext('2d');
-const canvasHeight = (canvas.height = 700);
-const canvasWidth = (canvas.width = 1000);
+import { canvasHeight, canvasWidth, ctx } from '../store/canvasProperty';
 
 export class GameObject {
   constructor(positionX, positionY) {

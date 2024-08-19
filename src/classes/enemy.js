@@ -8,6 +8,7 @@ export class EnemyClass extends GameObject {
   constructor(positionX, positionY) {
     super(positionX, positionY);
     this.velocity = { dx: 2, dy: 0 };
+    this.verticalOffset = this.canvasHeight / 2;
     this.originalPosition = this.positionY + 100;
     this.type = 'enemy';
     this.fireRate = 250;

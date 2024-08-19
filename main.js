@@ -1,80 +1,48 @@
 /** @type {HTMLCanvasElement} */
 import { keybindings, preventDefaultBehavior } from './src/util/keybinding';
 import { PlayerClass } from './src/classes/player';
-import { loadasset } from './src/util/loadasset';
 import { EnemyClass } from './src/classes/enemy';
 import { eventEmmiter, EventMaping } from './src/util/eventBinding';
 import { collision } from './src/util/collision';
+import { PushArray, WriteArray, ReadArray } from './src/store/gameObject';
+import { canvasHeight, canvasWidth, ctx } from './src/store/canvasProperty';
+import { boidsAlgo } from './src/algorithms/boids';
+import { GameloadedAssets } from './src/gen/loadAsset';
+import { sinosodial } from './src/algorithms/sinosodial';
+import { circular } from './src/algorithms/circular';
+import { generateEnemy } from './src/gen/enemy';
+import { solidRect, hollowRect, netRect } from './src/algorithms/spawn.Config';
 
-const canvas = document.querySelector('#canvas');
-const ctx = canvas.getContext('2d');
+export let onWindowLoad = false;
 const div = document.querySelector(`#hit`);
-let ObjectArray = new Array();
-
-let hero,
-  enemy,
-  laser,
-  playerSpirit = new EnemyClass();
+let playerSpirit, player, enemy, laser;
 let hitcount = 0;
-
-const canvasHeight = (canvas.height = 700);
-const canvasWidth = (canvas.width = 1000);
-
-function generateEnemy() {
-  const row = 8;
-  const col = 2;
-
-  for (let x = 0; x < row; x++) {
-    for (let y = 0; y < col; y++) {
-      const emy = new EnemyClass(
-        canvasWidth / 1.5 - 60 * x,
-        (y * canvasHeight) / (row * 1.9)
-      );
-      emy.img = enemy;
-      ObjectArray.push(emy);
-    }
-  }
-  // for (let x = 0; x < row; x++) {
-  //   for (let y = 0; y < col; y++) {
-  //     const emy = new EnemyClass(
-  //       Math.floor(Math.random() * canvasWidth),
-  //       Math.floor(Math.random() * canvasHeight)
-  //     );
-  //     emy.img = enemy;
-  //     ObjectArray.push(emy);
-  //   }
-  // }
-}
 
 function generatePlayer() {
   playerSpirit = new PlayerClass(
     canvasWidth / 2,
     canvasHeight - canvasHeight / 4
   );
-  ObjectArray.push(playerSpirit);
+  PushArray(playerSpirit);
 }
 
-import { boidsAlgo } from './src/algo/boids';
-import { sinosodial } from './src/algo/sinosodial';
-import { circular } from './src/algo/circular';
-
 function updateGame() {
-  let Enemy = ObjectArray.filter((obj) => obj.type === `enemy`);
-  let Laser = ObjectArray.filter((obj) => obj.type === `laser`);
-  let Player = ObjectArray.filter((obj) => obj.type === `player`);
+  let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
+  let Laser = ReadArray().filter((obj) => obj.type === `laser`);
+  let Player = ReadArray().filter((obj) => obj.type === `player`);
 
   boidsAlgo(Enemy);
   // sinosodial(Enemy);
 
   Player.forEach((obj) => {
-    obj.draw(hero);
+    obj.draw(player);
     obj.update();
   });
 
   Enemy.forEach((obj) => {
     obj.movement();
     obj.fire(
-      ObjectArray,
+      ReadArray(),
       obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY)
     );
     obj.draw(enemy);
@@ -101,7 +69,7 @@ function updateGame() {
     });
   });
 
-  ObjectArray = ObjectArray.filter((obj) => !obj.dead);
+  WriteArray(ReadArray().filter((obj) => !obj.dead));
   div.innerHTML = `Damage taken ${hitcount}`;
 }
 
@@ -123,7 +91,7 @@ const EventListener = () => {
     else playerSpirit.movementParameter.right = false;
   });
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
-    if (playerSpirit.canfire()) playerSpirit.fire(ObjectArray);
+    if (playerSpirit.canfire()) playerSpirit.fire(ReadArray());
   });
   eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, emy) => {
     emy.dead = true;
@@ -146,12 +114,12 @@ const animation = () => {
 };
 
 window.onload = async () => {
-  hero = await loadasset(`/player.png`);
-  enemy = await loadasset(`/enemyShip.png`);
-  // laser = await loadasset(`/laserGreen.png`);
-  laser = await loadasset(`/ball.png`);
+  onWindowLoad = true;
+  player = GameloadedAssets.player;
+  enemy = GameloadedAssets.enemy;
+  laser = GameloadedAssets.laserHoming;
   EventListener();
-  generateEnemy();
+  generateEnemy(7, 4, hollowRect, enemy);
   generatePlayer();
   animation();
 };
