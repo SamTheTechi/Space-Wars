@@ -41,7 +41,7 @@ export class PlayerClass extends GameObject {
       ObjectArray.push(
         new LaserClass(this.positionX, this.positionY, this.type)
       );
-      this.cooldown = 20;
+      this.cooldown = 10;
     }
   }
   canfire() {

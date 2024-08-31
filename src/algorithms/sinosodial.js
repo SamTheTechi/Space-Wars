@@ -10,6 +10,6 @@ export const sinosodial = (arr) => {
     const sinValue =
       Math.sin(time * parameter.frequency + phase) * parameter.amplitude;
 
-    i.positionY = i.originalPosition + sinValue;
+    i.positionY = i.originalPositionY + sinValue;
   });
 };

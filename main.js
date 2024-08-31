@@ -1,22 +1,24 @@
 /** @type {HTMLCanvasElement} */
 import { keybindings, preventDefaultBehavior } from './src/util/keybinding';
 import { PlayerClass } from './src/classes/player';
-import { EnemyClass } from './src/classes/enemy';
 import { eventEmmiter, EventMaping } from './src/util/eventBinding';
 import { collision } from './src/util/collision';
 import { PushArray, WriteArray, ReadArray } from './src/store/gameObject';
 import { canvasHeight, canvasWidth, ctx } from './src/store/canvasProperty';
 import { boidsAlgo } from './src/algorithms/boids';
-import { GameloadedAssets } from './src/gen/loadAsset';
 import { sinosodial } from './src/algorithms/sinosodial';
 import { circular } from './src/algorithms/circular';
+import { GameloadedAssets } from './src/gen/loadAsset';
 import { generateEnemy } from './src/gen/enemy';
-import { solidRect, hollowRect, netRect } from './src/algorithms/spawn.Config';
+import { lavalConfiguration } from './src/gen/level.config';
 
 export let onWindowLoad = false;
 const div = document.querySelector(`#hit`);
 let playerSpirit, player, enemy, laser;
 let hitcount = 0;
+let Level = 0;
+let GameStarted = false;
+let engageMovementAlgo = false;
 
 function generatePlayer() {
   playerSpirit = new PlayerClass(
@@ -31,13 +33,30 @@ function updateGame() {
   let Laser = ReadArray().filter((obj) => obj.type === `laser`);
   let Player = ReadArray().filter((obj) => obj.type === `player`);
 
-  boidsAlgo(Enemy);
-  // sinosodial(Enemy);
-
   Player.forEach((obj) => {
     obj.draw(player);
     obj.update();
   });
+
+  if (engageMovementAlgo) {
+    switch (lavalConfiguration[Level - 1].algorithm) {
+      case 'boids':
+        boidsAlgo(Enemy);
+        break;
+      case 'sinosodial':
+        sinosodial(Enemy);
+        break;
+      case 'circular':
+        circular(Enemy);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  if (Enemy.length <= 0 && GameStarted === true)
+    eventEmmiter.emit(EventMaping.NEXT_LEVEL, lavalConfiguration);
 
   Enemy.forEach((obj) => {
     obj.movement();
@@ -46,6 +65,7 @@ function updateGame() {
       obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY)
     );
     obj.draw(enemy);
+    if (obj.condition == true) engageMovementAlgo = true;
     if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
       eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
   });
@@ -105,6 +125,26 @@ const EventListener = () => {
     lsr.dead = true;
     hitcount++;
   });
+  eventEmmiter.on(EventMaping.NEXT_LEVEL, (_, data) => {
+    if (lavalConfiguration.length - 1 > Level) {
+      generateEnemy(
+        data[Level].count.col,
+        data[Level].count.row,
+        enemy,
+        data[Level].spawnConfig
+      );
+      engageMovementAlgo = false;
+      Level++;
+    } else {
+      // console.log('end of game');
+    }
+  });
+  eventEmmiter.on(EventMaping.ENTER_KEY, () => {
+    if (GameStarted != true) {
+      eventEmmiter.emit(EventMaping.NEXT_LEVEL, lavalConfiguration);
+      GameStarted = true;
+    }
+  });
 };
 
 const animation = () => {
@@ -119,7 +159,6 @@ window.onload = async () => {
   enemy = GameloadedAssets.enemy;
   laser = GameloadedAssets.laserHoming;
   EventListener();
-  generateEnemy(7, 4, hollowRect, enemy);
   generatePlayer();
   animation();
 };
