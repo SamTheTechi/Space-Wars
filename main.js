@@ -10,11 +10,12 @@ import { sinosodial } from './src/algorithms/sinosodial';
 import { circular } from './src/algorithms/circular';
 import { GameloadedAssets } from './src/gen/loadAsset';
 import { generateEnemy } from './src/gen/enemy';
+import { generateAnimation } from './src/gen/animation';
 import { lavalConfiguration } from './src/gen/level.config';
 
 export let onWindowLoad = false;
 const div = document.querySelector(`#hit`);
-let playerSpirit, player, enemy, laser;
+let playerSpirit, player, enemy, laser, explosion1, explosion2, explosion3;
 let hitcount = 0;
 let Level = 0;
 let GameStarted = false;
@@ -29,13 +30,47 @@ function generatePlayer() {
 }
 
 function updateGame() {
-  let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
-  let Laser = ReadArray().filter((obj) => obj.type === `laser`);
   let Player = ReadArray().filter((obj) => obj.type === `player`);
+  let Animation = ReadArray().filter((obj) => obj.type === `animation`);
+  let Laser = ReadArray().filter((obj) => obj.type === `laser`);
+  let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
 
   Player.forEach((obj) => {
     obj.draw(player);
     obj.update();
+  });
+
+  Animation.forEach((obj) => {
+    obj.draw(explosion1);
+    console.log(`working`);
+  });
+
+  Laser.forEach((obj) => {
+    obj.draw(laser);
+    obj.movement();
+  });
+
+  Enemy.forEach((obj) => {
+    obj.fire(
+      ReadArray(),
+      obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY)
+    );
+    obj.movement();
+    obj.draw(enemy);
+    if (obj.condition == true) engageMovementAlgo = true;
+    if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
+      eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
+    Laser.forEach((lsr) => {
+      if (lsr.owner === 'player') {
+        if (collision(obj.collisionBoundries(), lsr.collisionBoundries()))
+          eventEmmiter.emit(EventMaping.COLLISON_LASER, { obj, lsr });
+      } else {
+        if (
+          collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries())
+        )
+          eventEmmiter.emit(EventMaping.HIT_LASER, lsr);
+      }
+    });
   });
 
   if (engageMovementAlgo) {
@@ -57,37 +92,6 @@ function updateGame() {
 
   if (Enemy.length <= 0 && GameStarted === true)
     eventEmmiter.emit(EventMaping.NEXT_LEVEL, lavalConfiguration);
-
-  Enemy.forEach((obj) => {
-    obj.movement();
-    obj.fire(
-      ReadArray(),
-      obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY)
-    );
-    obj.draw(enemy);
-    if (obj.condition == true) engageMovementAlgo = true;
-    if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
-      eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
-  });
-
-  Laser.forEach((obj) => {
-    obj.draw(laser);
-    obj.movement();
-  });
-
-  Enemy.forEach((emy) => {
-    Laser.forEach((lsr) => {
-      if (lsr.owner === 'player') {
-        if (collision(emy.collisionBoundries(), lsr.collisionBoundries()))
-          eventEmmiter.emit(EventMaping.COLLISON_LASER, { emy, lsr });
-      } else {
-        if (
-          collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries())
-        )
-          eventEmmiter.emit(EventMaping.HIT_LASER, lsr);
-      }
-    });
-  });
 
   WriteArray(ReadArray().filter((obj) => !obj.dead));
   div.innerHTML = `Damage taken ${hitcount}`;
@@ -113,12 +117,13 @@ const EventListener = () => {
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ReadArray());
   });
-  eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, emy) => {
-    emy.dead = true;
+  eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, obj) => {
+    obj.dead = true;
     hitcount++;
   });
-  eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { emy, lsr }) => {
-    emy.dead = true;
+  eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { obj, lsr }) => {
+    generateAnimation(obj.positionY, obj.positionY);
+    obj.dead = true;
     lsr.dead = true;
   });
   eventEmmiter.on(EventMaping.HIT_LASER, (_, lsr) => {
@@ -158,6 +163,9 @@ window.onload = async () => {
   player = GameloadedAssets.player;
   enemy = GameloadedAssets.enemy;
   laser = GameloadedAssets.laserHoming;
+  explosion1 = GameloadedAssets.explosion1;
+  explosion2 = GameloadedAssets.explosion2;
+  explosion3 = GameloadedAssets.explosion3;
   EventListener();
   generatePlayer();
   animation();

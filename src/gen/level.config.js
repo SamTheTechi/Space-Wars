@@ -4,8 +4,8 @@ export const lavalConfiguration = [
   {
     // wave one
     type: '',
-    algorithm: 'circular',
-    spawnConfig: hollowRect,
+    algorithm: '',
+    spawnConfig: solidRect,
     count: {
       col: 4,
       row: 6,
@@ -34,7 +34,7 @@ export const lavalConfiguration = [
   {
     // wave four
     type: '',
-    algorithm: '',
+    algorithm: 'circular',
     spawnConfig: solidRect,
     count: {
       col: 1,

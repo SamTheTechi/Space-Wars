@@ -10,7 +10,7 @@ export function generateEnemy(col, row, enemy, type = solidRect) {
       if (arr[i][j]) {
         const emy = new EnemyClass(
           canvasWidth / 1.5 - 70 * i,
-          (j * canvasHeight) / row
+          (j * canvasHeight) / (row * 1.5)
         );
         emy.img = enemy;
         PushArray(emy);

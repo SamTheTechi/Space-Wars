@@ -1,5 +1,6 @@
 import { GameObject } from './object';
 import { LaserClass } from './laser';
+import { ctx } from '../store/canvasProperty';
 
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
@@ -13,9 +14,13 @@ export class PlayerClass extends GameObject {
       left: false,
       right: false,
     };
+    this.centerFrame = 2;
+    this.frame = 2;
+    this.motion = true;
   }
 
   movement() {
+    this.gameframe++;
     if (this.movementParameter.up && 0 < this.positionY) {
       this.positionY -= this.velocity.dy;
     } else if (
@@ -33,6 +38,19 @@ export class PlayerClass extends GameObject {
       this.canvasWidth > this.positionX + this.width / 2
     ) {
       this.positionX += this.velocity.dx;
+    }
+    if (this.gameframe % 12 === 0) {
+      if (this.movementParameter.right && this.frame <= 3) {
+        this.frame++;
+      } else if (this.movementParameter.left && this.frame > 0) {
+        this.frame--;
+      } else {
+        if (this.frame > 2 && !this.movementParameter.right) {
+          this.frame--;
+        } else if (this.frame < 2 && !this.movementParameter.left) {
+          this.frame++;
+        }
+      }
     }
   }
 

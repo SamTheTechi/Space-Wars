@@ -12,17 +12,33 @@ export class GameObject {
     this.img.src = '';
     this.height = 50;
     this.width = 50;
+    this.motion = false;
+    this.frame = 0;
+    this.gameframe = 0;
   }
-
   draw(img) {
     this.img = img;
-    ctx.drawImage(
-      this.img,
-      this.positionX - this.width / 2,
-      this.positionY,
-      this.width,
-      this.height
-    );
+    if (this.motion) {
+      ctx.drawImage(
+        this.img,
+        this.width * this.frame - 2,
+        0,
+        this.width,
+        this.height,
+        this.positionX - this.width / 2,
+        this.positionY,
+        this.width,
+        this.height
+      );
+    } else {
+      ctx.drawImage(
+        this.img,
+        this.positionX - this.width / 2,
+        this.positionY,
+        this.width,
+        this.height
+      );
+    }
   }
 
   collisionBoundries() {
