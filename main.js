@@ -12,6 +12,7 @@ import { GameloadedAssets } from './src/gen/loadAsset';
 import { generateEnemy } from './src/gen/enemy';
 import { generateAnimation } from './src/gen/animation';
 import { lavalConfiguration } from './src/gen/level.config';
+import { assesDimentions } from './src/store/assets';
 
 export let onWindowLoad = false;
 const div = document.querySelector(`#hit`);
@@ -29,6 +30,13 @@ function generatePlayer() {
   PushArray(playerSpirit);
 }
 
+// generateAnimation(
+//   canvasWidth / 2,
+//   canvasHeight / 2,
+//   assesDimentions.explosion1.width,
+//   assesDimentions.explosion1.height
+// );
+
 function updateGame() {
   let Player = ReadArray().filter((obj) => obj.type === `player`);
   let Animation = ReadArray().filter((obj) => obj.type === `animation`);
@@ -41,8 +49,8 @@ function updateGame() {
   });
 
   Animation.forEach((obj) => {
-    obj.draw(explosion1);
-    console.log(`working`);
+    obj.draw(explosion2);
+    obj.movement();
   });
 
   Laser.forEach((obj) => {
@@ -122,7 +130,12 @@ const EventListener = () => {
     hitcount++;
   });
   eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { obj, lsr }) => {
-    generateAnimation(obj.positionY, obj.positionY);
+    generateAnimation(
+      obj.positionY,
+      obj.positionX,
+      assesDimentions.explosion2.width,
+      assesDimentions.explosion2.height
+    );
     obj.dead = true;
     lsr.dead = true;
   });

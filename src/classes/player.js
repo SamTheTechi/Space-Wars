@@ -17,6 +17,7 @@ export class PlayerClass extends GameObject {
     this.centerFrame = 2;
     this.frame = 2;
     this.motion = true;
+    this.width = this.width - 2;
   }
 
   movement() {

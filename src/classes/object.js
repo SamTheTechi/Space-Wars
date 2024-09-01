@@ -21,22 +21,22 @@ export class GameObject {
     if (this.motion) {
       ctx.drawImage(
         this.img,
-        this.width * this.frame - 2,
+        this.width * this.frame,
         0,
         this.width,
         this.height,
         this.positionX - this.width / 2,
         this.positionY,
-        this.width,
-        this.height
+        this.width + this.width / 15,
+        this.height + this.height / 15
       );
     } else {
       ctx.drawImage(
         this.img,
         this.positionX - this.width / 2,
         this.positionY,
-        this.width,
-        this.height
+        this.width + this.width / 15,
+        this.height + this.height / 15
       );
     }
   }

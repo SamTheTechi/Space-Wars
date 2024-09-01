@@ -49,13 +49,6 @@ export class EnemyClass extends GameObject {
       );
     }
   }
-  updatePosition() {
-    // Interpolate between current and target positions
-    this.positionX +=
-      (this.targetPositionX - this.positionX) * this.movementSpeed;
-    this.positionY +=
-      (this.targetPositionY - this.positionY) * this.movementSpeed;
-  }
 
   locatePlayer(playerX, playerY) {
     const addNoise = (value) =>
