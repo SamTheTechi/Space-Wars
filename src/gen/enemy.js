@@ -1,10 +1,13 @@
 import { EnemyClass } from '../classes/enemy';
 import { canvasHeight, canvasWidth } from '../store/canvasProperty';
-import { PushArray } from '../store/gameObject';
+import { PushArray, CurrentLevel } from '../store/gameObject';
 import { solidRect } from '../algorithms/spawn.Config';
 
-export function generateEnemy(col, row, enemy, type = solidRect) {
-  const arr = type(col, row);
+export function generateEnemy(data) {
+  let col = data[CurrentLevel()].count.col;
+  let row = data[CurrentLevel()].count.row;
+  const arr = data[CurrentLevel()].spawnConfig(col, row);
+
   for (let i = 0; i < row; i++) {
     for (let j = 0; j < col; j++) {
       if (arr[i][j]) {
@@ -12,7 +15,6 @@ export function generateEnemy(col, row, enemy, type = solidRect) {
           canvasWidth / 1.5 - 70 * i,
           (j * canvasHeight) / (row * 1.5)
         );
-        emy.img = enemy;
         PushArray(emy);
       }
     }

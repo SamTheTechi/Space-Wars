@@ -1,4 +1,8 @@
 let GameObject = new Array();
+let Level = 0;
+
+export const IncreaseLevel = () => Level++;
+export const CurrentLevel = () => Level;
 
 export const WriteArray = (arr) => {
   GameObject.splice(0, GameObject.length);

@@ -1,8 +1,8 @@
 import { GameUnloadedAssets } from '../store/assets';
 
 export const GameloadedAssets = {};
-const assetsName = GameUnloadedAssets.map((item) =>
-  item.split('.')[0].substring(1)
+const assetsName = GameUnloadedAssets.map(
+  (item) => item.split('/')[2].split('.')[0]
 );
 
 assetsName.forEach((variable) => {
@@ -14,7 +14,7 @@ assetsName.forEach((variable) => {
 
 Promise.all(
   GameUnloadedAssets.map((item) => {
-    const name = item.split(`.`)[0].substring(1);
+    const name = item.split('/')[2].split('.')[0];
     return new Promise((resolve) => {
       const img = new Image();
       img.src = item;

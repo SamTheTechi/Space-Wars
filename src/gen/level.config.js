@@ -1,9 +1,10 @@
 import { solidRect, hollowRect, netRect } from '../algorithms/spawn.Config';
+import { EnemyMetaData } from '../meta/enemy';
 
-export const lavalConfiguration = [
+export const LevelConfiguration = [
   {
     // wave one
-    type: '',
+    class: EnemyMetaData.fighter,
     algorithm: '',
     spawnConfig: solidRect,
     count: {
@@ -13,7 +14,17 @@ export const lavalConfiguration = [
   },
   {
     // wave two
-    type: '',
+    class: EnemyMetaData.chaser,
+    algorithm: 'sinosodial',
+    spawnConfig: netRect,
+    count: {
+      col: 4,
+      row: 8,
+    },
+  },
+  {
+    // wave three
+    class: EnemyMetaData.kamekaze,
     algorithm: 'boids',
     spawnConfig: hollowRect,
     count: {
@@ -22,37 +33,27 @@ export const lavalConfiguration = [
     },
   },
   {
-    // wave three
-    type: '',
-    algorithm: 'sinosodial',
-    spawnConfig: netRect,
-    count: {
-      col: 4,
-      row: 10,
-    },
-  },
-  {
     // wave four
-    type: '',
+    class: EnemyMetaData.chaser,
     algorithm: 'circular',
     spawnConfig: solidRect,
     count: {
-      col: 1,
+      col: 4,
       row: 6,
     },
   },
   {
     // wave five
-    type: '',
+    class: EnemyMetaData.kamekaze,
     algorithm: '',
     spawnConfig: netRect,
     count: {
-      col: 3,
+      col: 4,
       row: 6,
     },
   },
   {
-    type: '',
+    class: '',
     algorithm: '',
     spawnConfig: '',
     count: {

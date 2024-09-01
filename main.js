@@ -3,7 +3,7 @@ import { keybindings, preventDefaultBehavior } from './src/util/keybinding';
 import { PlayerClass } from './src/classes/player';
 import { eventEmmiter, EventMaping } from './src/util/eventBinding';
 import { collision } from './src/util/collision';
-import { PushArray, WriteArray, ReadArray } from './src/store/gameObject';
+import { PushArray, WriteArray, ReadArray, CurrentLevel, IncreaseLevel } from './src/store/gameObject';
 import { canvasHeight, canvasWidth, ctx } from './src/store/canvasProperty';
 import { boidsAlgo } from './src/algorithms/boids';
 import { sinosodial } from './src/algorithms/sinosodial';
@@ -11,31 +11,35 @@ import { circular } from './src/algorithms/circular';
 import { GameloadedAssets } from './src/gen/loadAsset';
 import { generateEnemy } from './src/gen/enemy';
 import { generateAnimation } from './src/gen/animation';
-import { lavalConfiguration } from './src/gen/level.config';
-import { assesDimentions } from './src/store/assets';
+import { LevelConfiguration } from './src/gen/level.config';
+
+import { Zplayer } from './src/store/assets';
 
 export let onWindowLoad = false;
 const div = document.querySelector(`#hit`);
-let playerSpirit, player, enemy, laser, explosion1, explosion2, explosion3;
 let hitcount = 0;
-let Level = 0;
 let GameStarted = false;
 let engageMovementAlgo = false;
+let playerSpirit,
+  player,
+  shipgun,
+  chaser,
+  kamekazi,
+  fighter,
+  boss,
+  smallExplosion,
+  mediumExplosion,
+  largeExplosion,
+  shield,
+  homing,
+  dropboom,
+  bullets,
+  nuke;
 
 function generatePlayer() {
-  playerSpirit = new PlayerClass(
-    canvasWidth / 2,
-    canvasHeight - canvasHeight / 4
-  );
+  playerSpirit = new PlayerClass(canvasWidth / 2, canvasHeight - canvasHeight / 4);
   PushArray(playerSpirit);
 }
-
-// generateAnimation(
-//   canvasWidth / 2,
-//   canvasHeight / 2,
-//   assesDimentions.explosion1.width,
-//   assesDimentions.explosion1.height
-// );
 
 function updateGame() {
   let Player = ReadArray().filter((obj) => obj.type === `player`);
@@ -44,45 +48,44 @@ function updateGame() {
   let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
 
   Player.forEach((obj) => {
-    obj.draw(player);
+    obj.draw(Zplayer);
     obj.update();
   });
 
   Animation.forEach((obj) => {
-    obj.draw(explosion2);
+    obj.draw(largeExplosion);
     obj.movement();
   });
 
   Laser.forEach((obj) => {
-    obj.draw(laser);
+    obj.draw(bullets);
     obj.movement();
   });
 
   Enemy.forEach((obj) => {
-    obj.fire(
-      ReadArray(),
-      obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY)
-    );
+    let enemyType = LevelConfiguration[CurrentLevel()].class.type;
+    console.log(enemyType);
+    obj.draw(fighter);
+    obj.fire(ReadArray(), obj.locatePlayer(playerSpirit.positionX, playerSpirit.positionY));
     obj.movement();
-    obj.draw(enemy);
+
     if (obj.condition == true) engageMovementAlgo = true;
     if (collision(playerSpirit.collisionBoundries(), obj.collisionBoundries()))
       eventEmmiter.emit(EventMaping.COLLISON_PLAYER, obj);
+
     Laser.forEach((lsr) => {
       if (lsr.owner === 'player') {
         if (collision(obj.collisionBoundries(), lsr.collisionBoundries()))
           eventEmmiter.emit(EventMaping.COLLISON_LASER, { obj, lsr });
       } else {
-        if (
-          collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries())
-        )
+        if (collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries()))
           eventEmmiter.emit(EventMaping.HIT_LASER, lsr);
       }
     });
   });
 
   if (engageMovementAlgo) {
-    switch (lavalConfiguration[Level - 1].algorithm) {
+    switch (LevelConfiguration[CurrentLevel() - 1].algorithm) {
       case 'boids':
         boidsAlgo(Enemy);
         break;
@@ -92,14 +95,12 @@ function updateGame() {
       case 'circular':
         circular(Enemy);
         break;
-
       default:
         break;
     }
   }
 
-  if (Enemy.length <= 0 && GameStarted === true)
-    eventEmmiter.emit(EventMaping.NEXT_LEVEL, lavalConfiguration);
+  if (Enemy.length <= 0 && GameStarted === true) eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);
 
   WriteArray(ReadArray().filter((obj) => !obj.dead));
   div.innerHTML = `Damage taken ${hitcount}`;
@@ -130,12 +131,7 @@ const EventListener = () => {
     hitcount++;
   });
   eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { obj, lsr }) => {
-    generateAnimation(
-      obj.positionY,
-      obj.positionX,
-      assesDimentions.explosion2.width,
-      assesDimentions.explosion2.height
-    );
+    generateAnimation(obj.positionY, obj.positionX, 50, 50);
     obj.dead = true;
     lsr.dead = true;
   });
@@ -144,22 +140,17 @@ const EventListener = () => {
     hitcount++;
   });
   eventEmmiter.on(EventMaping.NEXT_LEVEL, (_, data) => {
-    if (lavalConfiguration.length - 1 > Level) {
-      generateEnemy(
-        data[Level].count.col,
-        data[Level].count.row,
-        enemy,
-        data[Level].spawnConfig
-      );
+    if (LevelConfiguration.length - 1 > CurrentLevel()) {
+      generateEnemy(data);
       engageMovementAlgo = false;
-      Level++;
+      IncreaseLevel();
     } else {
       // console.log('end of game');
     }
   });
   eventEmmiter.on(EventMaping.ENTER_KEY, () => {
     if (GameStarted != true) {
-      eventEmmiter.emit(EventMaping.NEXT_LEVEL, lavalConfiguration);
+      eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);
       GameStarted = true;
     }
   });
@@ -172,15 +163,25 @@ const animation = () => {
 };
 
 window.onload = async () => {
-  onWindowLoad = true;
   player = GameloadedAssets.player;
-  enemy = GameloadedAssets.enemy;
-  laser = GameloadedAssets.laserHoming;
-  explosion1 = GameloadedAssets.explosion1;
-  explosion2 = GameloadedAssets.explosion2;
-  explosion3 = GameloadedAssets.explosion3;
+  shipgun = GameloadedAssets.shipgun;
+  chaser = GameloadedAssets.chaser;
+  fighter = GameloadedAssets.fighter;
+  kamekazi = GameloadedAssets.kamekazi;
+  boss = GameloadedAssets.boss;
+  smallExplosion = GameloadedAssets.smallExplosion;
+  mediumExplosion = GameloadedAssets.mediumExplosion;
+  largeExplosion = GameloadedAssets.largeExplosion;
+  shield = GameloadedAssets.shield;
+  homing = GameloadedAssets.homing;
+  dropboom = GameloadedAssets.dropboom;
+  bullets = GameloadedAssets.bullets;
+  nuke = GameloadedAssets.nuke;
+  onWindowLoad = true;
+
   EventListener();
   generatePlayer();
+
   animation();
 };
 

@@ -1,24 +1,19 @@
 export const GameUnloadedAssets = new Array(
-  '/player.png',
-  '/enemy.png',
-  '/laserHoming.png',
-  '/laserRed.png',
-  '/explosion1.png',
-  '/explosion2.png',
-  '/explosion3.png'
+  '/player/player.png',
+  '/player/shipgun.png',
+  '/enemy/chaser.png',
+  '/enemy/fighter.png',
+  '/enemy/kamekazi.png',
+  '/enemy/boss.png',
+  '/effect/smallExplosion.png',
+  '/effect/mediumExplosion.png',
+  '/effect/largeExplosion.png',
+  '/effect/shield.png',
+  '/weapon/homing.png',
+  '/weapon/dropboom.png',
+  '/weapon/bullets.png',
+  '/weapon/nuke.png'
 );
 
-export const assesDimentions = {
-  explosion1: {
-    width: 32,
-    height: 32,
-  },
-  explosion2: {
-    width: 63.5,
-    height: 63.5,
-  },
-  explosion3: {
-    width: 63.5,
-    height: 63.5,
-  },
-};
+export const Zplayer = new Image();
+Zplayer.src = '/player/player.png';
