@@ -1,42 +1,76 @@
 import { GameObject } from './object';
+import { ctx } from '../store/canvasProperty';
 
 export class LaserClass extends GameObject {
-  constructor(positionX, positionY, parent, component = { x: 0, y: 1 }) {
+  constructor(positionX, positionY, parent, weaponData, component) {
     super(positionX, positionY);
-    this.component = { x: component.x, y: component.y };
-    this.component = component;
-    this.velocity = { homing: 8, other: 12 };
+    this.velocity = { homing: 6, other: 8 };
     this.type = 'laser';
-    this.kind = `homing`;
+    this.component = component;
     this.owner = parent;
-    this.height = 30;
-    this.width = 8;
+    this.height = weaponData.height;
+    this.width = weaponData.width;
+    this.weaponKind = weaponData.Kind;
+    this.img = weaponData.Image;
+    this.motion = weaponData.motion;
+    this.AnimationFrame = weaponData.AnimationFrame;
+    this.scalingFactor = weaponData.scalingFactor;
     if (this.positionY > 0) {
       this.positionY -= this.velocity.other;
     } else {
       this.dead = true;
     }
   }
+
+  drawAmmo() {
+    if (this.motion) {
+      ctx.drawImage(
+        this.img,
+        this.width * this.frame,
+        0,
+        this.width,
+        this.height,
+        this.positionX - this.width / 2,
+        this.positionY,
+        this.width * this.scalingFactor,
+        this.height * this.scalingFactor
+      );
+    } else {
+      ctx.drawImage(
+        this.img,
+        this.positionX - this.width / 2,
+        this.positionY,
+        this.width * this.scalingFactor,
+        this.height * this.scalingFactor
+      );
+    }
+  }
+
   movement() {
     switch (this.owner) {
       case 'player':
         this.positionY -= this.velocity.other;
         if (this.positionX < 0) this.dead = true;
         break;
-      case `enemy`:
-        switch (this.kind) {
-          case `homing`:
-            this.height = 13;
-            this.width = 13;
+      case 'enemy':
+        switch (this.weaponKind) {
+          case 'homing':
             this.positionX += this.velocity.homing * this.component.x;
             this.positionY += this.velocity.homing * this.component.y;
             break;
-          default:
+          case 'dropbomb':
             this.positionY += this.velocity.other;
+            break;
+          default:
             break;
         }
         if (this.positionY > this.canvasHeight) this.dead = true;
         break;
     }
+    if (this.gameframe % this.AnimationDuration === 0) {
+      if (this.frame < this.AnimationFrame) this.frame++;
+      else this.frame = 0;
+    }
+    this.gameframe++;
   }
 }

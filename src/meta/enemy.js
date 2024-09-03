@@ -3,31 +3,35 @@ import { AnimationMetaData } from './effect';
 
 export const EnemyMetaData = {
   kamekaze: {
-    type: 'kamekaze',
-    weapon: 'none',
+    Image: Object.assign(new Image(), { src: '/enemy/kamekazi.png' }),
+    weapon: WeaponMetaData.empty,
     width: 50,
     height: 50,
-    blastAnimation: AnimationMetaData.samllExplosion,
+    hitSound: '/audio/hitSound/kamekazi.wav',
+    blastAnimation: AnimationMetaData.mediumExplosion,
   },
   fighter: {
-    type: 'fighter',
-    weapon: WeaponMetaData.dropboom,
+    Image: Object.assign(new Image(), { src: '/enemy/fighter.png' }),
+    weapon: WeaponMetaData.dropbomb,
     width: 50,
     height: 50,
+    hitSound: '/audio/hitSound/fighter.wav',
     blastAnimation: AnimationMetaData.mediumExplosion,
   },
   chaser: {
-    type: 'chaser',
+    Image: Object.assign(new Image(), { src: '/enemy/chaser.png' }),
     weapon: WeaponMetaData.homing,
     width: 50,
     height: 50,
+    hitSound: '/audio/hitSound/chaser.wav',
     blastAnimation: AnimationMetaData.mediumExplosion,
   },
   boss: {
-    type: 'boss',
+    Image: Object.assign(new Image(), { src: '/enemy/boss.png' }),
     weapon: WeaponMetaData.nuke,
     width: 50,
     height: 50,
+    hitSound: '/audio/hitSound/boss.wav',
     blastAnimation: AnimationMetaData.largeExplosion,
   },
 };

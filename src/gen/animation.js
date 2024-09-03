@@ -1,7 +1,7 @@
 import { Animation } from '../classes/animation';
-import { PushArray } from '../store/gameObject';
+import { PushArray } from '../store/globalStore';
 
-export function generateAnimation(positionY, positionX, width, height) {
-  const anima = new Animation(positionY, positionX, width, height);
+export function generateAnimation(positionY, positionX, AnimationData) {
+  const anima = new Animation(positionY, positionX, AnimationData);
   PushArray(anima);
 }

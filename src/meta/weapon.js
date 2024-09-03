@@ -1,18 +1,41 @@
 export const WeaponMetaData = {
-  bullets: {
-    AnimationFrame: 4,
-    motion: true,
-  },
-  dropboom: {
+  bullet: {
+    Kind: 'bullet',
+    Image: Object.assign(new Image(), { src: '/weapon/bullet.png' }),
     AnimationFrame: 3,
     motion: true,
+    height: 32,
+    width: 32,
+    scalingFactor: 1.1,
+  },
+  dropbomb: {
+    Kind: 'dropbomb',
+    Image: Object.assign(new Image(), { src: '/weapon/dropbomb.png' }),
+    AnimationFrame: 2,
+    motion: true,
+    height: 32,
+    width: 32,
+    scalingFactor: 2.2,
   },
   homing: {
-    AnimationFrame: 10,
+    Kind: 'homing',
+    Image: Object.assign(new Image(), { src: '/weapon/homing.png' }),
+    AnimationFrame: 9,
     motion: true,
+    height: 32,
+    width: 32,
+    scalingFactor: 0.9,
   },
   nuke: {
+    Kind: 'nuke',
+    Image: Object.assign(new Image(), { src: '/weapon/nuke.png' }),
     AnimationFrame: 11,
     motion: false,
+    height: 10,
+    width: 10,
+    scalingFactor: 1,
+  },
+  empty: {
+    Kind: 'empty',
   },
 };

@@ -1,9 +1,11 @@
 #canvas {
-  width: 1000px;
-  height: 700px;
+  width: 1250px;
+  height: 780px;
   border-radius: 10px;
   padding: 10px;
-  background: url('/background.jpg') no-repeat center;
+  /* background: url('/background.jpg') no-repeat center; */
+  /* background: url('/background/Planet.png') no-repeat center; */
+  background: url('/background/Space_02-Sheet.png') no-repeat center;
   background-size: cover;
   position: absolute;
   left: 50%;

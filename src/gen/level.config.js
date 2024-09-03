@@ -4,26 +4,46 @@ import { EnemyMetaData } from '../meta/enemy';
 export const LevelConfiguration = [
   {
     // wave one
-    class: EnemyMetaData.fighter,
+    class: EnemyMetaData.kamekaze,
     algorithm: '',
     spawnConfig: solidRect,
-    count: {
-      col: 4,
-      row: 6,
-    },
-  },
-  {
-    // wave two
-    class: EnemyMetaData.chaser,
-    algorithm: 'sinosodial',
-    spawnConfig: netRect,
     count: {
       col: 4,
       row: 8,
     },
   },
   {
+    // wave two
+    class: EnemyMetaData.fighter,
+    algorithm: '',
+    spawnConfig: hollowRect,
+    count: {
+      col: 5,
+      row: 7,
+    },
+  },
+  {
     // wave three
+    class: EnemyMetaData.kamekaze,
+    algorithm: 'sinosodial',
+    spawnConfig: netRect,
+    count: {
+      col: 6,
+      row: 8,
+    },
+  },
+  {
+    // wave four
+    class: EnemyMetaData.chaser,
+    algorithm: 'circular',
+    spawnConfig: netRect,
+    count: {
+      col: 3,
+      row: 7,
+    },
+  },
+  {
+    // wave five
     class: EnemyMetaData.kamekaze,
     algorithm: 'boids',
     spawnConfig: hollowRect,
@@ -33,23 +53,53 @@ export const LevelConfiguration = [
     },
   },
   {
-    // wave four
-    class: EnemyMetaData.chaser,
+    // wave six
+    class: EnemyMetaData.fighter,
     algorithm: 'circular',
-    spawnConfig: solidRect,
+    spawnConfig: hollowRect,
     count: {
       col: 4,
       row: 6,
     },
   },
   {
-    // wave five
+    // wave seven
+    class: EnemyMetaData.chaser,
+    algorithm: 'circular',
+    spawnConfig: solidRect,
+    count: {
+      col: 2,
+      row: 9,
+    },
+  },
+  {
+    // wave eight
     class: EnemyMetaData.kamekaze,
-    algorithm: '',
+    algorithm: 'boids',
     spawnConfig: netRect,
     count: {
+      col: 6,
+      row: 9,
+    },
+  },
+  {
+    // wave nine
+    class: EnemyMetaData.fighter,
+    algorithm: 'sinosodial',
+    spawnConfig: solidRect,
+    count: {
       col: 4,
-      row: 6,
+      row: 8,
+    },
+  },
+  {
+    // wave ten
+    class: EnemyMetaData.chaser,
+    algorithm: 'boids',
+    spawnConfig: solidRect,
+    count: {
+      col: 4,
+      row: 5,
     },
   },
   {
