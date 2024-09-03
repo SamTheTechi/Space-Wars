@@ -7,6 +7,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 1.1,
+    fireRate: 100,
   },
   dropbomb: {
     Kind: 'dropbomb',
@@ -16,6 +17,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 2.2,
+    fireRate: 170,
   },
   homing: {
     Kind: 'homing',
@@ -24,16 +26,18 @@ export const WeaponMetaData = {
     motion: true,
     height: 32,
     width: 32,
-    scalingFactor: 0.9,
+    scalingFactor: 0.8,
+    fireRate: 250,
   },
   nuke: {
     Kind: 'nuke',
     Image: Object.assign(new Image(), { src: '/weapon/nuke.png' }),
     AnimationFrame: 11,
     motion: false,
-    height: 10,
-    width: 10,
-    scalingFactor: 1,
+    height: 45,
+    width: 12,
+    scalingFactor: 1.3,
+    fireRate: 50,
   },
   empty: {
     Kind: 'empty',

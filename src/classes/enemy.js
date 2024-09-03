@@ -5,23 +5,24 @@ import { PlayerCoordinates } from '../store/globalStore';
 import { generateAnimation } from '../gen/animation';
 import { ctx } from '../store/canvasProperty';
 import { playSound } from '../util/playSound';
+import { AnimationMetaData } from '../meta/effect';
 
 const noiseFactor = 50;
 
 export class EnemyClass extends GameObject {
   constructor(positionX, positionY, MetaData) {
     super(positionX, positionY);
-    this.velocity = { dx: 3, dy: 4 };
+    this.velocity = { dx: 3, dy: 4.5 };
     this.verticalOffset = this.canvasHeight;
     this.positionY = positionY - this.verticalOffset;
     this.type = 'enemy';
     this.originalPositionY = positionY + 100;
     this.originalPositionX = positionX;
-    this.kind = this.fireRate = 200;
     this.condition = false;
     this.targetPositionX = positionX;
     this.targetPositionY = positionY;
     this.MetaData = MetaData;
+    this.hp = MetaData.hp;
     this.width = MetaData.width;
     this.height = MetaData.height;
   }
@@ -55,10 +56,15 @@ export class EnemyClass extends GameObject {
   }
 
   fire(ObjectArray) {
-    if (Math.floor(Math.random() * this.fireRate) === 0 && this.condition && this.MetaData.weapon.Kind !== 'empty') {
+    if (
+      Math.floor(Math.random() * this.MetaData.weapon.fireRate) === 0 &&
+      this.condition &&
+      this.MetaData.weapon.Kind !== 'empty'
+    ) {
+      playSound(this.MetaData.weaponSound, 0.3);
       ObjectArray.push(
         new LaserClass(
-          this.positionX - this.width / 2.2,
+          this.positionX,
           this.positionY + this.height / 2,
           this.type,
           this.MetaData.weapon,
@@ -69,8 +75,14 @@ export class EnemyClass extends GameObject {
   }
 
   deadEffect() {
-    playSound(this.MetaData.hitSound);
-    generateAnimation(this.positionX, this.positionY, this.MetaData.blastAnimation);
+    if (this.hp <= 0) {
+      this.dead = true;
+      playSound(this.MetaData.hitSound);
+      generateAnimation(this.positionX, this.positionY, this.MetaData.blastAnimation);
+    } else {
+      this.hp--;
+      generateAnimation(this.positionX, this.positionY + this.height, AnimationMetaData.smallExplosion);
+    }
   }
 
   locatePlayer() {

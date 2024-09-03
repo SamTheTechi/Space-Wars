@@ -12,11 +12,13 @@ import { generateEnemy } from './src/gen/enemy';
 import { LevelConfiguration } from './src/gen/level.config';
 import { playSound } from './src/util/playSound';
 import { generateAlianNoise } from './src/gen/randomSound';
+import { generateAnimation } from './src/gen/animation';
+import { AnimationMetaData } from './src/meta/effect';
 
 export let onWindowLoad = false;
 
-const battleMusic = playSound('/audio/backgroundSound/battle.wav', 0.6, true);
-const menuMusic = playSound('/audio/backgroundSound/menu.wav', 0.6, true);
+const battleMusic = playSound('/audio/backgroundSound/battle.mp3', 0.6, true);
+const menuMusic = playSound('/audio/backgroundSound/menu.mp3', 0.6, true);
 menuMusic.play();
 battleMusic.pause();
 const div = document.querySelector(`#hit`);
@@ -114,17 +116,16 @@ const EventListener = () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ReadArray());
   });
   eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, obj) => {
-    obj.deadEffect();
-    obj.dead = true;
     hitcount++;
+    obj.deadEffect();
   });
   eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { obj, lsr }) => {
     lsr.dead = true;
     obj.deadEffect();
-    obj.dead = true;
   });
   eventEmmiter.on(EventMaping.HIT_LASER, (_, lsr) => {
     lsr.dead = true;
+    generateAnimation(lsr.positionX, lsr.positionY + 20, AnimationMetaData.smallExplosion);
     hitcount++;
   });
   eventEmmiter.on(EventMaping.NEXT_LEVEL, (_, data) => {

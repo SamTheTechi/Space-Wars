@@ -23,7 +23,8 @@ export class PlayerClass extends GameObject {
     this.motion = true;
     this.width = this.width - 2;
     this.scalingFactor = 1.2;
-    this.fireSound = '/audio/weapon/player.wav';
+    this.buffer = 15;
+    this.fireSound = '/audio/weapon/player.mp3';
   }
   drawPlayer() {
     ctx.drawImage(
@@ -43,13 +44,22 @@ export class PlayerClass extends GameObject {
     UpdateX(this.positionX);
     UpdateY(this.positionY);
     this.gameframe++;
-    if (this.movementParameter.up && 0 < this.positionY) {
+    if (this.movementParameter.up && 0 < this.positionY - this.buffer) {
       this.positionY -= this.velocity.dy;
-    } else if (this.movementParameter.down && this.canvasHeight > this.positionY + this.height) {
+    } else if (
+      this.movementParameter.down &&
+      this.canvasHeight > this.positionY + this.buffer + this.height * this.scalingFactor
+    ) {
       this.positionY += this.velocity.dy;
-    } else if (this.movementParameter.left && 0 < this.positionX - this.width / 2) {
+    } else if (
+      this.movementParameter.left &&
+      0 < this.positionX - this.buffer - (this.width * this.scalingFactor) / 2
+    ) {
       this.positionX -= this.velocity.dx;
-    } else if (this.movementParameter.right && this.canvasWidth > this.positionX + this.width / 2) {
+    } else if (
+      this.movementParameter.right &&
+      this.canvasWidth > this.positionX + this.buffer + (this.width * this.scalingFactor) / 2
+    ) {
       this.positionX += this.velocity.dx;
     }
     if (this.gameframe % 12 === 0) {

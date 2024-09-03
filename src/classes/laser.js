@@ -1,10 +1,11 @@
 import { GameObject } from './object';
 import { ctx } from '../store/canvasProperty';
+import { PlayerCoordinates } from '../store/globalStore';
 
 export class LaserClass extends GameObject {
   constructor(positionX, positionY, parent, weaponData, component) {
     super(positionX, positionY);
-    this.velocity = { homing: 6, other: 8 };
+    this.velocity = { homing: 6, other: 8, nuke: 1 };
     this.type = 'laser';
     this.component = component;
     this.owner = parent;
@@ -60,6 +61,10 @@ export class LaserClass extends GameObject {
             break;
           case 'dropbomb':
             this.positionY += this.velocity.other;
+            break;
+          case 'nuke':
+            this.positionY += this.velocity.nuke * (this.positionY / 35);
+            this.positionX += (this.velocity.nuke * (PlayerCoordinates().X - this.positionX)) / 80;
             break;
           default:
             break;

@@ -18,7 +18,7 @@ export const LevelConfiguration = [
     algorithm: '',
     spawnConfig: hollowRect,
     count: {
-      col: 5,
+      col: 3,
       row: 7,
     },
   },
@@ -98,8 +98,18 @@ export const LevelConfiguration = [
     algorithm: 'boids',
     spawnConfig: solidRect,
     count: {
-      col: 4,
-      row: 5,
+      col: 3,
+      row: 6,
+    },
+  },
+  {
+    // boss
+    class: EnemyMetaData.boss,
+    algorithm: '',
+    spawnConfig: solidRect,
+    count: {
+      col: 1,
+      row: 1,
     },
   },
   {
