@@ -5,7 +5,7 @@ import { PlayerCoordinates } from '../store/globalStore';
 export class LaserClass extends GameObject {
   constructor(positionX, positionY, parent, weaponData, component) {
     super(positionX, positionY);
-    this.velocity = { homing: 6, other: 8, nuke: 1 };
+    this.velocity = { homing: 6, bomb: 8, nuke: 0.1, bullet: 12 };
     this.type = 'laser';
     this.component = component;
     this.owner = parent;
@@ -16,11 +16,6 @@ export class LaserClass extends GameObject {
     this.motion = weaponData.motion;
     this.AnimationFrame = weaponData.AnimationFrame;
     this.scalingFactor = weaponData.scalingFactor;
-    if (this.positionY > 0) {
-      this.positionY -= this.velocity.other;
-    } else {
-      this.dead = true;
-    }
   }
 
   drawAmmo() {
@@ -50,8 +45,7 @@ export class LaserClass extends GameObject {
   movement() {
     switch (this.owner) {
       case 'player':
-        this.positionY -= this.velocity.other;
-        if (this.positionX < 0) this.dead = true;
+        this.positionY -= this.velocity.bullet;
         break;
       case 'enemy':
         switch (this.weaponKind) {
@@ -60,16 +54,18 @@ export class LaserClass extends GameObject {
             this.positionY += this.velocity.homing * this.component.y;
             break;
           case 'dropbomb':
-            this.positionY += this.velocity.other;
+            this.positionY += this.velocity.bomb;
+            break;
+          case 'invbullet':
+            this.positionY += this.velocity.bullet;
             break;
           case 'nuke':
-            this.positionY += this.velocity.nuke * (this.positionY / 35);
-            this.positionX += (this.velocity.nuke * (PlayerCoordinates().X - this.positionX)) / 80;
+            this.positionY += this.velocity.nuke * (this.positionY / 5);
+            this.positionX += (this.velocity.nuke * (PlayerCoordinates().X - this.positionX)) / 10;
             break;
           default:
             break;
         }
-        if (this.positionY > this.canvasHeight) this.dead = true;
         break;
     }
     if (this.gameframe % this.AnimationDuration === 0) {
@@ -77,5 +73,12 @@ export class LaserClass extends GameObject {
       else this.frame = 0;
     }
     this.gameframe++;
+    if (
+      this.positionX - 10 < 0 ||
+      this.positionX + 10 > this.canvasWidth ||
+      this.positionY - 10 < 0 ||
+      this.positionY + 10 > this.canvasHeight
+    )
+      this.dead = true;
   }
 }

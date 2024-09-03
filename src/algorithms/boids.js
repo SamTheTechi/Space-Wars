@@ -1,20 +1,27 @@
 import { collision } from '../util/collision';
 import { distanceBetween } from '../util/distance';
 
-const parameter = {
-  flockStrength: 10,
+export const boidsParameter = {
+  flockStrength: 9,
   avoideStrength: 2,
   veocityStrength: 8,
-  gradientStrength: 20,
-  noise: 5,
+  gradientStrength: 10,
   maxSpeed: 10,
 };
 
-const addnoise = (value) => {
-  return value + (Math.random() - 0.5) * (parameter.noise / 10);
+export const bossBoidsParameter = {
+  flockStrength: 6,
+  avoideStrength: 4,
+  veocityStrength: 2,
+  gradientStrength: 35,
+  maxSpeed: 6,
 };
 
-const flockTowardsCenter = (arr) => {
+const addnoise = (value) => {
+  return value + (Math.random() - 0.5) * 0.5;
+};
+
+const flockTowardsCenter = (arr, parameter) => {
   const center = { x: 0, y: 0 };
 
   for (let i of arr) {
@@ -30,12 +37,11 @@ const flockTowardsCenter = (arr) => {
     i.velocity.dx += addnoise(distanceX * parameter.flockStrength) / 100000;
     i.velocity.dy += addnoise(distanceY * parameter.flockStrength) / 100000;
 
-    i.velocity.dy -=
-      (parameter.gradientStrength / 1000) * (i.positionY / center.y);
+    i.velocity.dy -= (parameter.gradientStrength / 1000) * (i.positionY / center.y);
   });
 };
 
-const matchVelocity = (arr) => {
+const matchVelocity = (arr, parameter) => {
   const avgVelocity = { dx: 0, dy: 0 };
   for (let i of arr) {
     avgVelocity.dx += i.velocity.dx;
@@ -45,14 +51,10 @@ const matchVelocity = (arr) => {
   avgVelocity.dy /= arr.length;
 
   arr.forEach((i) => {
-    i.velocity.dx +=
-      ((avgVelocity.dx - i.velocity.dx) * parameter.veocityStrength) / 800;
-    i.velocity.dy +=
-      ((avgVelocity.dy - i.velocity.dy) * parameter.veocityStrength) / 800;
+    i.velocity.dx += ((avgVelocity.dx - i.velocity.dx) * parameter.veocityStrength) / 800;
+    i.velocity.dy += ((avgVelocity.dy - i.velocity.dy) * parameter.veocityStrength) / 800;
 
-    const speed = Math.sqrt(
-      i.velocity.dx * i.velocity.dx + i.velocity.dy * i.velocity.dy
-    );
+    const speed = Math.sqrt(i.velocity.dx * i.velocity.dx + i.velocity.dy * i.velocity.dy);
     if (speed > parameter.maxSpeed) {
       const scaleFactor = parameter.maxSpeed / speed;
       i.velocity.dx *= scaleFactor;
@@ -61,7 +63,7 @@ const matchVelocity = (arr) => {
   });
 };
 
-const avoiedOther = (arr) => {
+const avoiedOther = (arr, parameter) => {
   arr.forEach((i, indexI) => {
     arr.forEach((j, indexJ) => {
       if (indexI !== indexJ) {
@@ -75,27 +77,19 @@ const avoiedOther = (arr) => {
           let avoidanceX = (distanceX > 0 ? -1 : 1) * avoidanceStrength;
           let avoidanceY = (distanceY > 0 ? -1 : 1) * avoidanceStrength;
 
-          i.velocity.dx += addnoise(
-            (avoidanceX * parameter.avoideStrength) / 100
-          );
-          i.velocity.dy += addnoise(
-            (avoidanceY * parameter.avoideStrength) / 100
-          );
+          i.velocity.dx += addnoise((avoidanceX * parameter.avoideStrength) / 100);
+          i.velocity.dy += addnoise((avoidanceY * parameter.avoideStrength) / 100);
 
-          j.velocity.dx -= addnoise(
-            (avoidanceX * parameter.avoideStrength) / 100
-          );
-          j.velocity.dy -= addnoise(
-            (avoidanceY * parameter.avoideStrength) / 100
-          );
+          j.velocity.dx -= addnoise((avoidanceX * parameter.avoideStrength) / 100);
+          j.velocity.dy -= addnoise((avoidanceY * parameter.avoideStrength) / 100);
         }
       }
     });
   });
 };
 
-export const boidsAlgo = (arr) => {
-  avoiedOther(arr);
-  flockTowardsCenter(arr);
-  matchVelocity(arr);
+export const boids = (arr, parameter) => {
+  avoiedOther(arr, parameter);
+  flockTowardsCenter(arr, parameter);
+  matchVelocity(arr, parameter);
 };

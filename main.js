@@ -5,9 +5,9 @@ import { eventEmmiter, EventMaping } from './src/util/eventBinding';
 import { collision } from './src/util/collision';
 import { PushArray, WriteArray, ReadArray, CurrentLevel, IncreaseLevel } from './src/store/globalStore';
 import { canvasHeight, canvasWidth, ctx } from './src/store/canvasProperty';
-import { boidsAlgo } from './src/algorithms/boids';
-import { sinosodial } from './src/algorithms/sinosodial';
-import { circular } from './src/algorithms/circular';
+import { boids, boidsParameter, bossBoidsParameter } from './src/algorithms/boids';
+import { sinosodial, highSinCirParameter } from './src/algorithms/sinosodial';
+import { circular, lowSinCirParameter } from './src/algorithms/circular';
 import { generateEnemy } from './src/gen/enemy';
 import { LevelConfiguration } from './src/gen/level.config';
 import { playSound } from './src/util/playSound';
@@ -21,22 +21,22 @@ const battleMusic = playSound('/audio/backgroundSound/battle.mp3', 0.6, true);
 const menuMusic = playSound('/audio/backgroundSound/menu.mp3', 0.6, true);
 menuMusic.play();
 battleMusic.pause();
-const div = document.querySelector(`#hit`);
-let hitcount = 0;
 let GameStarted = false;
 let engageMovementAlgo = false;
 let playerSpirit;
+const div = document.querySelector(`#hit`);
 
 function generatePlayer() {
   playerSpirit = new PlayerClass(canvasWidth / 2, canvasHeight - canvasHeight / 4);
   PushArray(playerSpirit);
 }
-
 function updateGame() {
   let Player = ReadArray().filter((obj) => obj.type === `player`);
   let Animation = ReadArray().filter((obj) => obj.type === `animation`);
   let Laser = ReadArray().filter((obj) => obj.type === `laser`);
   let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
+  let playerLaser = Laser.filter((item) => item.owner === 'player');
+  let enemyLaser = Laser.filter((item) => item.owner === 'enemy');
 
   Player.forEach((obj) => {
     obj.drawPlayer();
@@ -53,6 +53,13 @@ function updateGame() {
     obj.movement();
   });
 
+  playerLaser.forEach((playerLsr) => {
+    enemyLaser.forEach((enemyLsr) => {
+      if (collision(playerLsr.collisionBoundries(), enemyLsr.collisionBoundries()))
+        eventEmmiter.emit(EventMaping.COLLISON_LASER, { playerLsr, enemyLsr });
+    });
+  });
+
   Enemy.forEach((obj) => {
     obj.drawEnemy();
     obj.fire(ReadArray());
@@ -65,7 +72,7 @@ function updateGame() {
     Laser.forEach((lsr) => {
       if (lsr.owner === 'player') {
         if (collision(obj.collisionBoundries(), lsr.collisionBoundries()))
-          eventEmmiter.emit(EventMaping.COLLISON_LASER, { obj, lsr });
+          eventEmmiter.emit(EventMaping.COLLISON_ENEMY, { obj, lsr });
       } else {
         if (collision(playerSpirit.collisionBoundries(), lsr.collisionBoundries()))
           eventEmmiter.emit(EventMaping.HIT_LASER, lsr);
@@ -75,14 +82,23 @@ function updateGame() {
 
   if (engageMovementAlgo) {
     switch (LevelConfiguration[CurrentLevel() - 1].algorithm) {
-      case 'boids':
-        boidsAlgo(Enemy);
+      case 'HB':
+        boids(Enemy, bossBoidsParameter);
         break;
-      case 'sinosodial':
-        sinosodial(Enemy);
+      case 'LB':
+        boids(Enemy, boidsParameter);
         break;
-      case 'circular':
-        circular(Enemy);
+      case 'HS':
+        sinosodial(Enemy, highSinCirParameter);
+        break;
+      case 'LS':
+        sinosodial(Enemy, lowSinCirParameter);
+        break;
+      case 'HC':
+        circular(Enemy, highSinCirParameter);
+        break;
+      case 'LC':
+        circular(Enemy, lowSinCirParameter);
         break;
       default:
         break;
@@ -92,7 +108,7 @@ function updateGame() {
   if (Enemy.length <= 0 && GameStarted === true) eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);
 
   WriteArray(ReadArray().filter((obj) => !obj.dead));
-  div.innerHTML = `Damage taken ${hitcount}`;
+  div.innerHTML = `Damage taken ${playerSpirit.hp}`;
 }
 
 const EventListener = () => {
@@ -115,18 +131,23 @@ const EventListener = () => {
   eventEmmiter.on(EventMaping.SPACE_KEY, () => {
     if (playerSpirit.canfire()) playerSpirit.fire(ReadArray());
   });
+  eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { playerLsr, enemyLsr }) => {
+    playerLsr.dead = true;
+    enemyLsr.dead = true;
+    playSound('/audio/hitSound/lasercollision.mp3');
+    generateAnimation(enemyLsr.positionX, enemyLsr.positionY, AnimationMetaData.smallExplosion);
+  });
   eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, obj) => {
-    hitcount++;
     obj.deadEffect();
   });
-  eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { obj, lsr }) => {
+  eventEmmiter.on(EventMaping.COLLISON_ENEMY, (_, { obj, lsr }) => {
     lsr.dead = true;
     obj.deadEffect();
   });
   eventEmmiter.on(EventMaping.HIT_LASER, (_, lsr) => {
+    playerSpirit.dmgTaken();
     lsr.dead = true;
     generateAnimation(lsr.positionX, lsr.positionY + 20, AnimationMetaData.smallExplosion);
-    hitcount++;
   });
   eventEmmiter.on(EventMaping.NEXT_LEVEL, (_, data) => {
     if (LevelConfiguration.length - 1 > CurrentLevel()) {
@@ -134,7 +155,7 @@ const EventListener = () => {
       generateEnemy(data);
       IncreaseLevel();
     } else {
-      // console.log('end of game');
+      playSound('/audio/event/youwon.mp3');
     }
   });
   eventEmmiter.on(EventMaping.ENTER_KEY, () => {
@@ -142,7 +163,7 @@ const EventListener = () => {
     battleMusic.play();
     setInterval(() => {
       playSound(generateAlianNoise(), 0.4);
-    }, 5000);
+    }, 6000);
 
     if (GameStarted != true) {
       eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);

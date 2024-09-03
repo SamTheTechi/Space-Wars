@@ -5,12 +5,16 @@ import { UpdateX, UpdateY } from '../store/globalStore';
 import { player } from '../meta/player';
 import { ctx } from '../store/canvasProperty';
 import { playSound } from '../util/playSound';
+import { generateAnimation } from '../gen/animation';
+import { AnimationMetaData } from '../meta/effect';
 
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
     super(positionX, positionY);
     this.velocity = { dx: 8, dy: 8 };
     this.cooldown = 0;
+    this.val = true;
+    this.resistance = 0;
     this.type = 'player';
     this.movementParameter = {
       up: false,
@@ -19,6 +23,7 @@ export class PlayerClass extends GameObject {
       right: false,
     };
     this.img = player;
+    this.hp = 5;
     this.frame = 2;
     this.motion = true;
     this.width = this.width - 2;
@@ -88,13 +93,33 @@ export class PlayerClass extends GameObject {
           WeaponMetaData.bullet
         )
       );
-      this.cooldown = 18;
+      this.cooldown = 15;
+    }
+  }
+  dmgTaken() {
+    if (this.hp <= 0) {
+      if (this.val) {
+        playSound('/audio/hitSound/boss.mp3');
+        generateAnimation(this.positionX, this.positionY, AnimationMetaData.largeExplosion);
+        setTimeout(() => {
+          playSound('/audio/event/gameover.mp3');
+        }, 1000);
+        this.dead = true;
+        this.val = false;
+      }
+    } else if (this.resistance === 0) {
+      // this.hp--;
+      playSound('/audio/hitSound/player.mp3');
+      this.resistance = 40;
     }
   }
   canfire() {
     return this.cooldown === 0;
   }
   cool() {
+    if (this.resistance) {
+      this.resistance -= 1;
+    }
     if (this.cooldown > 0) {
       this.cooldown -= 1;
     }

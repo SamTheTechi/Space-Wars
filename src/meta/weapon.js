@@ -7,7 +7,17 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 1.1,
-    fireRate: 100,
+    fireRate: 50,
+  },
+  invbullet: {
+    Kind: 'invbullet',
+    Image: Object.assign(new Image(), { src: '/weapon/invbullet.png' }),
+    AnimationFrame: 3,
+    motion: true,
+    height: 32,
+    width: 32,
+    scalingFactor: 1,
+    fireRate: 25,
   },
   dropbomb: {
     Kind: 'dropbomb',
@@ -17,7 +27,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 2.2,
-    fireRate: 170,
+    fireRate: 160,
   },
   homing: {
     Kind: 'homing',
@@ -27,7 +37,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 0.8,
-    fireRate: 250,
+    fireRate: 220,
   },
   nuke: {
     Kind: 'nuke',
@@ -37,7 +47,7 @@ export const WeaponMetaData = {
     height: 45,
     width: 12,
     scalingFactor: 1.3,
-    fireRate: 50,
+    fireRate: 45,
   },
   empty: {
     Kind: 'empty',

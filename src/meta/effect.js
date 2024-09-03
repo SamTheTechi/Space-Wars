@@ -7,9 +7,17 @@ export const AnimationMetaData = {
     height: 32,
     scalingFactor: 1,
   },
-  mediumExplosion: {
-    Kind: 'mediumExplosion',
-    Image: Object.assign(new Image(), { src: '/effect/mediumExplosion.png' }),
+  mediumYellowExplosion: {
+    Kind: 'mediumYellowExplosion',
+    Image: Object.assign(new Image(), { src: '/effect/mediumYellowExplosion.png' }),
+    AnimationFrame: 9,
+    width: 63.5,
+    height: 63.5,
+    scalingFactor: 0.9,
+  },
+  mediumGreenExplosion: {
+    Kind: 'mediumGreenExplosion',
+    Image: Object.assign(new Image(), { src: '/effect/mediumGreenExplosion.png' }),
     AnimationFrame: 9,
     width: 63.5,
     height: 63.5,

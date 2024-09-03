@@ -23,8 +23,18 @@ export class EnemyClass extends GameObject {
     this.targetPositionY = positionY;
     this.MetaData = MetaData;
     this.hp = MetaData.hp;
+    this.cooldown = 0;
     this.width = MetaData.width;
     this.height = MetaData.height;
+  }
+
+  canfire() {
+    return this.cooldown === 0;
+  }
+  cool() {
+    if (this.cooldown > 0) {
+      this.cooldown -= 1;
+    }
   }
 
   drawEnemy() {
@@ -38,6 +48,7 @@ export class EnemyClass extends GameObject {
   }
 
   movement() {
+    this.cool();
     if (this.verticalOffset >= 0) {
       this.verticalOffset -= this.velocity.dy;
       this.positionY += this.velocity.dy;
@@ -57,9 +68,10 @@ export class EnemyClass extends GameObject {
 
   fire(ObjectArray) {
     if (
-      Math.floor(Math.random() * this.MetaData.weapon.fireRate) === 0 &&
+      Math.floor((Math.random() * this.MetaData.weapon.fireRate) / this.MetaData.bossFactor) === 0 &&
       this.condition &&
-      this.MetaData.weapon.Kind !== 'empty'
+      this.MetaData.weapon.Kind !== 'empty' &&
+      this.canfire()
     ) {
       playSound(this.MetaData.weaponSound, 0.3);
       ObjectArray.push(
@@ -71,6 +83,7 @@ export class EnemyClass extends GameObject {
           this.locatePlayer()
         )
       );
+      this.cooldown = 10;
     }
   }
 
@@ -81,6 +94,7 @@ export class EnemyClass extends GameObject {
       generateAnimation(this.positionX, this.positionY, this.MetaData.blastAnimation);
     } else {
       this.hp--;
+      playSound('/audio/hitSound/lowDamage.mp3');
       generateAnimation(this.positionX, this.positionY + this.height, AnimationMetaData.smallExplosion);
     }
   }
