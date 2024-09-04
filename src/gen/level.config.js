@@ -79,7 +79,7 @@ export const LevelConfiguration = [
     spawnConfig: netRect,
     count: {
       col: 3,
-      row: 9,
+      row: 8,
     },
   },
   {
@@ -89,7 +89,7 @@ export const LevelConfiguration = [
     spawnConfig: solidRect,
     count: {
       col: 4,
-      row: 5,
+      row: 4,
     },
   },
   {
@@ -109,7 +109,7 @@ export const LevelConfiguration = [
     spawnConfig: solidRect,
     count: {
       col: 2,
-      row: 4,
+      row: 5,
     },
   },
   {
@@ -129,7 +129,7 @@ export const LevelConfiguration = [
     spawnConfig: hollowRect,
     count: {
       col: 5,
-      row: 9,
+      row: 8,
     },
   },
   {
@@ -138,7 +138,7 @@ export const LevelConfiguration = [
     algorithm: '',
     spawnConfig: netRect,
     count: {
-      col: 5,
+      col: 4,
       row: 8,
     },
   },
@@ -209,7 +209,7 @@ export const LevelConfiguration = [
     spawnConfig: netRect,
     count: {
       col: 4,
-      row: 9,
+      row: 8,
     },
   },
   {
@@ -238,7 +238,7 @@ export const LevelConfiguration = [
     algorithm: 'LS',
     spawnConfig: solidRect,
     count: {
-      col: 4,
+      col: 3,
       row: 8,
     },
   },
@@ -289,7 +289,7 @@ export const LevelConfiguration = [
     spawnConfig: solidRect,
     count: {
       col: 3,
-      row: 6,
+      row: 5,
     },
   },
   {

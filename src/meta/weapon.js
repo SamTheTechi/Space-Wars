@@ -17,7 +17,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 1,
-    fireRate: 25,
+    fireRate: 30,
   },
   dropbomb: {
     Kind: 'dropbomb',
@@ -27,7 +27,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 2.2,
-    fireRate: 160,
+    fireRate: 170,
   },
   homing: {
     Kind: 'homing',
@@ -37,7 +37,7 @@ export const WeaponMetaData = {
     height: 32,
     width: 32,
     scalingFactor: 0.8,
-    fireRate: 220,
+    fireRate: 225,
   },
   nuke: {
     Kind: 'nuke',

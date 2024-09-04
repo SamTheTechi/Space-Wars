@@ -5,7 +5,7 @@ import { PlayerCoordinates } from '../store/globalStore';
 export class LaserClass extends GameObject {
   constructor(positionX, positionY, parent, weaponData, component) {
     super(positionX, positionY);
-    this.velocity = { homing: 6, bomb: 8, nuke: 0.1, bullet: 12 };
+    this.velocity = { homing: 5.5, bomb: 7.5, nuke: 0.1, bullet: 11 };
     this.type = 'laser';
     this.component = component;
     this.owner = parent;
@@ -45,7 +45,7 @@ export class LaserClass extends GameObject {
   movement() {
     switch (this.owner) {
       case 'player':
-        this.positionY -= this.velocity.bullet;
+        this.positionY -= this.velocity.bullet + 1;
         break;
       case 'enemy':
         switch (this.weaponKind) {

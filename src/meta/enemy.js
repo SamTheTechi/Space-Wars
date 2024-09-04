@@ -44,7 +44,7 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/nuke.mp3',
     blastAnimation: AnimationMetaData.mediumGreenExplosion,
     hp: 0,
-    bossFactor: 0.1,
+    bossFactor: 0.12,
   },
   crabBoss: {
     Image: Object.assign(new Image(), { src: '/enemy/crabBoss.png' }),
@@ -55,7 +55,7 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/nuke.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 19,
-    bossFactor: 1.2,
+    bossFactor: 1.15,
   },
   fighterBoss: {
     Image: Object.assign(new Image(), { src: '/enemy/fighterBoss.png' }),
@@ -66,7 +66,7 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/invbullet.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 11,
-    bossFactor: 1,
+    bossFactor: 0.95,
   },
   gunShip: {
     Image: Object.assign(new Image(), { src: '/enemy/gunship.png' }),
@@ -77,6 +77,6 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/homing.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 49,
-    bossFactor: 22,
+    bossFactor: 21,
   },
 };

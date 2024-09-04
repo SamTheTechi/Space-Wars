@@ -12,7 +12,7 @@ const game = document.querySelector(`#game`);
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
     super(positionX, positionY);
-    this.velocity = { dx: 8, dy: 8 };
+    this.velocity = { dx: 8.5, dy: 8.5 };
     this.cooldown = 0;
     this.val = true;
     this.resistance = 0;
@@ -94,7 +94,7 @@ export class PlayerClass extends GameObject {
           WeaponMetaData.bullet
         )
       );
-      this.cooldown = 16;
+      this.cooldown = 13;
     }
   }
   dmgTaken() {
@@ -112,7 +112,7 @@ export class PlayerClass extends GameObject {
     } else if (this.resistance === 0) {
       this.hp--;
       playSound('/audio/hitSound/player.mp3');
-      this.resistance = 40;
+      this.resistance = 45;
     }
   }
   canfire() {
