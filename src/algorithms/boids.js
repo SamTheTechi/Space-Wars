@@ -5,7 +5,7 @@ export const boidsParameter = {
   flockStrength: 9,
   avoideStrength: 2,
   veocityStrength: 8,
-  gradientStrength: 10,
+  gradientStrength: 8,
   maxSpeed: 10,
 };
 

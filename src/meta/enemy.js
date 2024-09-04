@@ -10,7 +10,7 @@ export const EnemyMetaData = {
     hitSound: '/audio/hitSound/kamekazi.mp3',
     weaponSound: '',
     blastAnimation: AnimationMetaData.mediumYellowExplosion,
-    hp: 0,
+    hp: 1,
     bossFactor: 1,
   },
   fighter: {
@@ -55,7 +55,7 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/nuke.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 19,
-    bossFactor: 1.5,
+    bossFactor: 1.2,
   },
   fighterBoss: {
     Image: Object.assign(new Image(), { src: '/enemy/fighterBoss.png' }),
@@ -77,6 +77,6 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/homing.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 49,
-    bossFactor: 20,
+    bossFactor: 22,
   },
 };

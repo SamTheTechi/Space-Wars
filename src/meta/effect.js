@@ -35,8 +35,8 @@ export const AnimationMetaData = {
     Kind: 'shield',
     Image: Object.assign(new Image(), { src: '/effect/shield.png' }),
     AnimationFrame: 11,
-    width: 100,
-    height: 100,
-    scalingFactor: 1,
+    width: 64,
+    height: 128,
+    scalingFactor: 2,
   },
 };

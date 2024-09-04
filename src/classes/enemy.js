@@ -12,7 +12,7 @@ const noiseFactor = 50;
 export class EnemyClass extends GameObject {
   constructor(positionX, positionY, MetaData) {
     super(positionX, positionY);
-    this.velocity = { dx: 3, dy: 4.5 };
+    this.velocity = { dx: 4.5, dy: 4 };
     this.verticalOffset = this.canvasHeight;
     this.positionY = positionY - this.verticalOffset;
     this.type = 'enemy';
@@ -53,7 +53,7 @@ export class EnemyClass extends GameObject {
       this.verticalOffset -= this.velocity.dy;
       this.positionY += this.velocity.dy;
     } else if (this.verticalOffset < 0 && !this.condition) {
-      this.velocity.dy = 0;
+      this.velocity.dy = 0.2;
       this.condition = true;
     } else {
       this.positionY += this.velocity.dy;
@@ -90,11 +90,11 @@ export class EnemyClass extends GameObject {
   deadEffect() {
     if (this.hp <= 0) {
       this.dead = true;
-      playSound(this.MetaData.hitSound);
+      playSound(this.MetaData.hitSound, 0.9);
       generateAnimation(this.positionX, this.positionY, this.MetaData.blastAnimation);
     } else {
       this.hp--;
-      playSound('/audio/hitSound/lowDamage.mp3');
+      playSound('/audio/hitSound/lowDamage.mp3', 1);
       generateAnimation(this.positionX, this.positionY + this.height, AnimationMetaData.smallExplosion);
     }
   }

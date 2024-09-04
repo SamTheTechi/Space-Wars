@@ -17,14 +17,18 @@ import { AnimationMetaData } from './src/meta/effect';
 
 export let onWindowLoad = false;
 
-const battleMusic = playSound('/audio/backgroundSound/battle.mp3', 0.6, true);
-const menuMusic = playSound('/audio/backgroundSound/menu.mp3', 0.6, true);
+const battleMusic = playSound('/audio/backgroundSound/battle.mp3', 0.45, true);
+const menuMusic = playSound('/audio/backgroundSound/menu.mp3', 0.45, true);
 menuMusic.play();
 battleMusic.pause();
 let GameStarted = false;
+let GameWon = false;
 let engageMovementAlgo = false;
 let playerSpirit;
 const div = document.querySelector(`#hit`);
+const wave = document.querySelector(`#wave`);
+const game = document.querySelector(`#game`);
+const rule = document.querySelector(`#countrols`);
 
 function generatePlayer() {
   playerSpirit = new PlayerClass(canvasWidth / 2, canvasHeight - canvasHeight / 4);
@@ -108,7 +112,8 @@ function updateGame() {
   if (Enemy.length <= 0 && GameStarted === true) eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);
 
   WriteArray(ReadArray().filter((obj) => !obj.dead));
-  div.innerHTML = `Damage taken ${playerSpirit.hp}`;
+  div.innerHTML = `Health Remaning : ${playerSpirit.hp}`;
+  wave.innerHTML = `Wave Number: ${CurrentLevel()}`;
 }
 
 const EventListener = () => {
@@ -138,6 +143,7 @@ const EventListener = () => {
     generateAnimation(enemyLsr.positionX, enemyLsr.positionY, AnimationMetaData.smallExplosion);
   });
   eventEmmiter.on(EventMaping.COLLISON_PLAYER, (_, obj) => {
+    playerSpirit.dmgTaken();
     obj.deadEffect();
   });
   eventEmmiter.on(EventMaping.COLLISON_ENEMY, (_, { obj, lsr }) => {
@@ -154,18 +160,24 @@ const EventListener = () => {
       engageMovementAlgo = false;
       generateEnemy(data);
       IncreaseLevel();
+      GameWon = true;
     } else {
-      playSound('/audio/event/youwon.mp3');
+      if (GameWon) {
+        game.innerHTML = `Mission Completed!`;
+        playSound('/audio/event/youwon.mp3');
+        GameWon = false;
+      }
     }
   });
   eventEmmiter.on(EventMaping.ENTER_KEY, () => {
-    menuMusic.pause();
-    battleMusic.play();
-    setInterval(() => {
-      playSound(generateAlianNoise(), 0.4);
-    }, 6000);
-
     if (GameStarted != true) {
+      setInterval(() => {
+        playSound(generateAlianNoise(), 0.4);
+      }, 6000);
+      game.innerHTML = ``;
+      rule.style.visibility = 'hidden';
+      menuMusic.pause();
+      battleMusic.play();
       eventEmmiter.emit(EventMaping.NEXT_LEVEL, LevelConfiguration);
       GameStarted = true;
     }

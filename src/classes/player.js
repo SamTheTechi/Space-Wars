@@ -7,6 +7,7 @@ import { ctx } from '../store/canvasProperty';
 import { playSound } from '../util/playSound';
 import { generateAnimation } from '../gen/animation';
 import { AnimationMetaData } from '../meta/effect';
+const game = document.querySelector(`#game`);
 
 export class PlayerClass extends GameObject {
   constructor(positionX, positionY) {
@@ -23,7 +24,7 @@ export class PlayerClass extends GameObject {
       right: false,
     };
     this.img = player;
-    this.hp = 5;
+    this.hp = 10;
     this.frame = 2;
     this.motion = true;
     this.width = this.width - 2;
@@ -93,7 +94,7 @@ export class PlayerClass extends GameObject {
           WeaponMetaData.bullet
         )
       );
-      this.cooldown = 15;
+      this.cooldown = 16;
     }
   }
   dmgTaken() {
@@ -106,9 +107,10 @@ export class PlayerClass extends GameObject {
         }, 1000);
         this.dead = true;
         this.val = false;
+        game.innerHTML = 'Game Over';
       }
     } else if (this.resistance === 0) {
-      // this.hp--;
+      this.hp--;
       playSound('/audio/hitSound/player.mp3');
       this.resistance = 40;
     }
