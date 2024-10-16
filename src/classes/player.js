@@ -23,6 +23,7 @@ export class PlayerClass extends GameObject {
       left: false,
       right: false,
     };
+    this.Onfire = false;
     this.img = player;
     this.hp = 10;
     this.frame = 2;
@@ -94,7 +95,7 @@ export class PlayerClass extends GameObject {
           WeaponMetaData.bullet
         )
       );
-      this.cooldown = 13;
+      this.cooldown = 15;
     }
   }
   dmgTaken() {

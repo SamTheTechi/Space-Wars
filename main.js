@@ -41,7 +41,7 @@ function updateGame() {
   let Enemy = ReadArray().filter((obj) => obj.type === `enemy`);
   let playerLaser = Laser.filter((item) => item.owner === 'player');
   let enemyLaser = Laser.filter((item) => item.owner === 'enemy');
-
+  if (playerSpirit.canfire() && playerSpirit.OnFire) playerSpirit.fire(ReadArray());
   Player.forEach((obj) => {
     obj.drawPlayer();
     obj.update();
@@ -133,8 +133,9 @@ const EventListener = () => {
     if (onMove) playerSpirit.movementParameter.right = true;
     else playerSpirit.movementParameter.right = false;
   });
-  eventEmmiter.on(EventMaping.SPACE_KEY, () => {
-    if (playerSpirit.canfire()) playerSpirit.fire(ReadArray());
+  eventEmmiter.on(EventMaping.SPACE_KEY, (_, onFire) => {
+    playerSpirit.OnFire = onFire;
+    console.log(onFire)
   });
   eventEmmiter.on(EventMaping.COLLISON_LASER, (_, { playerLsr, enemyLsr }) => {
     playerLsr.dead = true;

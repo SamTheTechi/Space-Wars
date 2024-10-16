@@ -9,7 +9,7 @@ export const LevelConfiguration = [
     spawnConfig: solidRect,
     count: {
       col: 3,
-      row: 7,
+      row: 6,
     },
   },
   {
@@ -188,7 +188,7 @@ export const LevelConfiguration = [
     algorithm: 'LB',
     spawnConfig: netRect,
     count: {
-      col: 4,
+      col: 5,
       row: 6,
     },
   },
@@ -289,7 +289,7 @@ export const LevelConfiguration = [
     spawnConfig: solidRect,
     count: {
       col: 3,
-      row: 5,
+      row: 6,
     },
   },
   {

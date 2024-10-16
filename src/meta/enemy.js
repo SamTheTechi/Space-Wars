@@ -54,7 +54,7 @@ export const EnemyMetaData = {
     hitSound: '/audio/hitSound/boss.mp3',
     weaponSound: '/audio/weapon/nuke.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
-    hp: 19,
+    hp: 16,
     bossFactor: 1.15,
   },
   fighterBoss: {
@@ -65,8 +65,8 @@ export const EnemyMetaData = {
     hitSound: '/audio/hitSound/boss.mp3',
     weaponSound: '/audio/weapon/invbullet.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
-    hp: 11,
-    bossFactor: 0.95,
+    hp: 13,
+    bossFactor: 0.96,
   },
   gunShip: {
     Image: Object.assign(new Image(), { src: '/enemy/gunship.png' }),
@@ -77,6 +77,6 @@ export const EnemyMetaData = {
     weaponSound: '/audio/weapon/homing.mp3',
     blastAnimation: AnimationMetaData.largeExplosion,
     hp: 49,
-    bossFactor: 21,
+    bossFactor: 22,
   },
 };

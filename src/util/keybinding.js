@@ -1,6 +1,7 @@
 import { eventEmmiter, EventMaping } from './eventBinding';
 
 let onMove;
+let onFire;
 
 const keysDown = async () => {
   window.addEventListener('keydown', (event) => {
@@ -29,7 +30,7 @@ const keysDown = async () => {
         eventEmmiter.emit(EventMaping.ENTER_KEY);
         break;
       case ` `:
-        eventEmmiter.emit(EventMaping.SPACE_KEY);
+        eventEmmiter.emit(EventMaping.SPACE_KEY, (onFire = true));
         break;
     }
   });
@@ -57,6 +58,9 @@ const keysUp = async () => {
       case `S`:
       case `ArrowDown`:
         eventEmmiter.emit(EventMaping.DOWN_KEY, (onMove = false));
+        break;
+      case ` `:
+        eventEmmiter.emit(EventMaping.SPACE_KEY, (onFire = false));
         break;
     }
   });

@@ -76,7 +76,7 @@ export class LaserClass extends GameObject {
     if (
       this.positionX - 10 < 0 ||
       this.positionX + 10 > this.canvasWidth ||
-      this.positionY - 10 < 0 ||
+      this.positionY < 0 ||
       this.positionY + 10 > this.canvasHeight
     )
       this.dead = true;
