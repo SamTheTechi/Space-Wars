@@ -3,7 +3,7 @@
   height: 100%;
   border-radius: 10px;
   padding: 10px;
-  background: url('/background/Space_02-Sheet.png') no-repeat center;
+  background: url('/background/Space.png') no-repeat center;
   background-size: cover;
   position: absolute;
   left: 50%;
@@ -12,22 +12,26 @@
   border: 2px solid;
   border-color: rgba(128, 128, 128, 0.2);
 }
+
 body {
   font-family: 'Orbitron';
   overflow: hidden;
   background: black;
 }
+
 .text {
   z-index: 2;
   font-size: 30px;
   color: rgba(245, 245, 245, 0.7);
   position: absolute;
 }
+
 #countrols {
   font-size: 23px;
   list-style: none;
   bottom: 0;
 }
+
 #game {
   text-align: center;
   font-size: 35px;
@@ -35,6 +39,7 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 #wave {
   right: 2%;
 }

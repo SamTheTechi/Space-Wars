@@ -1,5 +1,5 @@
-const canvas = document.querySelector('#canvas');
-export const ctx = canvas.getContext('2d');
+const canvas = document.querySelector("#canvas");
+export const ctx = canvas.getContext("2d");
 
 const magnifyingFactor = 0.9;
 
@@ -15,7 +15,7 @@ const updateCanvasSize = () => {
   canvas.style.width = `100%`;
 };
 
-window.addEventListener('resize', updateCanvasSize);
+window.addEventListener("resize", updateCanvasSize);
 updateCanvasSize();
 
 export const canvasHeight = (canvas.height = windowHeight * magnifyingFactor);

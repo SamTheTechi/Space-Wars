@@ -1,11 +1,11 @@
-import { solidRect, hollowRect, netRect } from '../algorithms/spawn.Config';
-import { EnemyMetaData } from '../meta/enemy';
+import { solidRect, hollowRect, netRect } from "../algorithms/spawn.Config";
+import { EnemyMetaData } from "../meta/enemy";
 
 export const LevelConfiguration = [
   {
     // 1
     class: EnemyMetaData.kamekaze,
-    algorithm: '',
+    algorithm: "",
     spawnConfig: solidRect,
     count: {
       col: 3,
@@ -15,37 +15,7 @@ export const LevelConfiguration = [
   {
     // 2
     class: EnemyMetaData.fighter,
-    algorithm: '',
-    spawnConfig: hollowRect,
-    count: {
-      col: 3,
-      row: 5,
-    },
-  },
-  {
-    // 3
-    class: EnemyMetaData.chaser,
-    algorithm: '',
-    spawnConfig: solidRect,
-    count: {
-      col: 1,
-      row: 8,
-    },
-  },
-  {
-    // 4
-    class: EnemyMetaData.nuker,
-    algorithm: '',
-    spawnConfig: hollowRect,
-    count: {
-      col: 4,
-      row: 6,
-    },
-  },
-  {
-    // 5
-    class: EnemyMetaData.fighter,
-    algorithm: 'LC',
+    algorithm: "LC",
     spawnConfig: netRect,
     count: {
       col: 2,
@@ -53,9 +23,9 @@ export const LevelConfiguration = [
     },
   },
   {
-    // 6
+    // 3
     class: EnemyMetaData.nuker,
-    algorithm: 'LS',
+    algorithm: "LS",
     spawnConfig: hollowRect,
     count: {
       col: 3,
@@ -63,29 +33,19 @@ export const LevelConfiguration = [
     },
   },
   {
-    // 7
-    class: EnemyMetaData.fighter,
-    algorithm: 'LS',
-    spawnConfig: solidRect,
-    count: {
-      col: 1,
-      row: 9,
-    },
-  },
-  {
-    // 8
+    // 4
     class: EnemyMetaData.chaser,
-    algorithm: 'LC',
+    algorithm: "LC",
     spawnConfig: netRect,
     count: {
       col: 3,
-      row: 8,
+      row: 7,
     },
   },
   {
-    // 9
+    // 5
     class: EnemyMetaData.kamekaze,
-    algorithm: 'LB',
+    algorithm: "LB",
     spawnConfig: solidRect,
     count: {
       col: 4,
@@ -93,19 +53,9 @@ export const LevelConfiguration = [
     },
   },
   {
-    // 10 fighterboss
-    class: EnemyMetaData.fighterBoss,
-    algorithm: 'HS',
-    spawnConfig: netRect,
-    count: {
-      col: 1,
-      row: 6,
-    },
-  },
-  {
-    // 11
+    // 6
     class: EnemyMetaData.fighter,
-    algorithm: 'LC',
+    algorithm: "LC",
     spawnConfig: solidRect,
     count: {
       col: 2,
@@ -113,9 +63,19 @@ export const LevelConfiguration = [
     },
   },
   {
-    // 12
+    // 7 fighterboss
+    class: EnemyMetaData.fighterBoss,
+    algorithm: "HS",
+    spawnConfig: netRect,
+    count: {
+      col: 1,
+      row: 6,
+    },
+  },
+  {
+    // 8
     class: EnemyMetaData.nuker,
-    algorithm: 'LS',
+    algorithm: "LS",
     spawnConfig: netRect,
     count: {
       col: 4,
@@ -123,19 +83,59 @@ export const LevelConfiguration = [
     },
   },
   {
-    // 13
+    // 9
     class: EnemyMetaData.kamekaze,
-    algorithm: 'LB',
+    algorithm: "LB",
     spawnConfig: hollowRect,
     count: {
       col: 5,
+      row: 7,
+    },
+  },
+  {
+    // 10
+    class: EnemyMetaData.chaser,
+    algorithm: "",
+    spawnConfig: netRect,
+    count: {
+      col: 4,
       row: 8,
+    },
+  },
+  {
+    // 11
+    class: EnemyMetaData.fighter,
+    algorithm: "LB",
+    spawnConfig: netRect,
+    count: {
+      col: 5,
+      row: 6,
+    },
+  },
+  {
+    // 12
+    class: EnemyMetaData.chaser,
+    algorithm: "LS",
+    spawnConfig: solidRect,
+    count: {
+      col: 2,
+      row: 8,
+    },
+  },
+  {
+    // 13 crabBoss
+    class: EnemyMetaData.crabBoss,
+    algorithm: "HB",
+    spawnConfig: solidRect,
+    count: {
+      col: 1,
+      row: 2,
     },
   },
   {
     // 14
     class: EnemyMetaData.chaser,
-    algorithm: '',
+    algorithm: "LC",
     spawnConfig: netRect,
     count: {
       col: 4,
@@ -144,19 +144,19 @@ export const LevelConfiguration = [
   },
   {
     // 15
-    class: EnemyMetaData.kamekaze,
-    algorithm: 'HS',
+    class: EnemyMetaData.nuker,
+    algorithm: "LS",
     spawnConfig: netRect,
     count: {
-      col: 6,
-      row: 8,
+      col: 4,
+      row: 7,
     },
   },
   {
     // 16
-    class: EnemyMetaData.fighter,
-    algorithm: '',
-    spawnConfig: hollowRect,
+    class: EnemyMetaData.kamekaze,
+    algorithm: "LB",
+    spawnConfig: solidRect,
     count: {
       col: 4,
       row: 6,
@@ -164,138 +164,38 @@ export const LevelConfiguration = [
   },
   {
     // 17
+    class: EnemyMetaData.fighter,
+    algorithm: "LS",
+    spawnConfig: solidRect,
+    count: {
+      col: 3,
+      row: 8,
+    },
+  },
+  {
+    // 18
     class: EnemyMetaData.nuker,
-    algorithm: 'HC',
-    spawnConfig: hollowRect,
+    algorithm: "LB",
+    spawnConfig: netRect,
     count: {
       col: 3,
       row: 5,
     },
   },
   {
-    // 18
+    //  19
     class: EnemyMetaData.chaser,
-    algorithm: 'LS',
-    spawnConfig: solidRect,
-    count: {
-      col: 2,
-      row: 9,
-    },
-  },
-  {
-    // 19
-    class: EnemyMetaData.fighter,
-    algorithm: 'LB',
-    spawnConfig: netRect,
-    count: {
-      col: 5,
-      row: 6,
-    },
-  },
-  {
-    // 20 crabBoss
-    class: EnemyMetaData.crabBoss,
-    algorithm: 'HB',
-    spawnConfig: solidRect,
-    count: {
-      col: 1,
-      row: 2,
-    },
-  },
-  {
-    // 21
-    class: EnemyMetaData.chaser,
-    algorithm: 'LC',
-    spawnConfig: netRect,
-    count: {
-      col: 4,
-      row: 8,
-    },
-  },
-  {
-    // 22
-    class: EnemyMetaData.nuker,
-    algorithm: 'LS',
-    spawnConfig: netRect,
-    count: {
-      col: 4,
-      row: 7,
-    },
-  },
-  {
-    // 23
-    class: EnemyMetaData.kamekaze,
-    algorithm: 'LB',
-    spawnConfig: solidRect,
-    count: {
-      col: 4,
-      row: 6,
-    },
-  },
-  {
-    // 24
-    class: EnemyMetaData.fighter,
-    algorithm: 'LS',
+    algorithm: "LB",
     spawnConfig: solidRect,
     count: {
       col: 3,
-      row: 8,
+      row: 5,
     },
   },
   {
-    // 25
-    class: EnemyMetaData.chaser,
-    algorithm: 'LC',
-    spawnConfig: solidRect,
-    count: {
-      col: 3,
-      row: 8,
-    },
-  },
-  {
-    // 26
-    class: EnemyMetaData.nuker,
-    algorithm: 'LB',
-    spawnConfig: netRect,
-    count: {
-      col: 3,
-      row: 6,
-    },
-  },
-  {
-    // 27
-    class: EnemyMetaData.fighter,
-    algorithm: 'HS',
-    spawnConfig: netRect,
-    count: {
-      col: 4,
-      row: 10,
-    },
-  },
-  {
-    // 28
-    class: EnemyMetaData.nuker,
-    algorithm: 'HC',
-    spawnConfig: solidRect,
-    count: {
-      col: 3,
-      row: 7,
-    },
-  },
-  {
-    //  29
-    class: EnemyMetaData.chaser,
-    algorithm: 'LB',
-    spawnConfig: solidRect,
-    count: {
-      col: 3,
-      row: 6,
-    },
-  },
-  {
-    // 30
+    // 20
     class: EnemyMetaData.gunShip,
-    algorithm: 'HC',
+    algorithm: "HC",
     spawnConfig: solidRect,
     count: {
       col: 1,
@@ -303,9 +203,9 @@ export const LevelConfiguration = [
     },
   },
   {
-    class: '',
-    algorithm: '',
-    spawnConfig: '',
+    class: "",
+    algorithm: "",
+    spawnConfig: "",
     count: {
       col: 1,
       row: 6,
